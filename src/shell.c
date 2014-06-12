@@ -2,104 +2,41 @@
  * \author Jef Wagner
  * \email jefwagner@gmail.com
  *********************************************************************
- * These are the functions for working with the shell data structure.
- * The book-keeping function include
- * - shell_add_vertex
- * - shell_add_line
- * - shell_add_triangle
- * - shell_remove_vertex
- * - shell_remove_line
- * - shell_merge_vertex
- * - shell_merge_line
- * The functions we need are:
- * - shell_attach
- * - shell_insert
- * - shell_close
- * - shell_remove
  */
-
 /*!
- * A simple enum to determine if a part of the shell is on the edge of
- * the shell or not.
- */
-typedef enum{ on, off} on_edge;
-
-/*!
- * Point data structure.
+ * This file contains the functions we need to work with the shell
+ * object. The exported function are:
+ * - `shell_malloc`, a constructor,
+ * - `shell_copy`, a copy method,
+ * - `shell_free`, a destructor,
+ * - `shell_initialize`, initialize the shell with 1 triangle,
+ * - `shell_attach`, add a triangle to the shell,
+ * - `shell_insert`, insert a triangle into the shell,
+ * - `shell_close`, close two neighboring edges in a shell,
+ * - `shell_join`, join two non-neighboring edges in a shell,
+ * - `shell_remove`, remove a triangle from the shell. 
  *
- * A point is three doubles.
+ * Local to the file (so declared `static`) are the bookkeeping
+ * functions:
+ * - `add_vertex`, add a vertex to the shell,
+ * - `remove_vertex`, remove a vertex from the shell,
+ * - `add_line`, add a line to the shell,
+ * - `remove_line`, remove a line from the shell,
+ * - `midpoint`, find the midpoint between two points,
+ * - `merge_vertex`, merge two vertices,
+ * - `triangle_on_edge`, find if a triangle is on the edge,
+ * - `vertex_on_edge`, find if a vertex is on the edge,
+ * - `merge_line`, merge two lines,
+ * - `vertex_lines_on_edge`, find edge lines connected to a vertex.
  */
-typedef struct{ double x[3]} point;
 
-/*!
- * Line data structure.
- *
- * A line is two unsigned ints (indices of the vertices).
- */
-typedef struct{ unsigned int i[2]} line;
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-/*!
- * Triangle data structure.
- *
- * A triangle is three unsigned ints (indices of the vertices).
- */
-typedef struct{ unsigned int i[3]} triangle;
+#include "shell.h"
 
-/*!
- * Addiontal vertex data.
- *
- * In addition to the points in the vertex array, we keep track of
- * which lines and which triangles contain that vertex.
- */
-typedef struct{
-  on_edge oe;
-  unsigned int num_l;
-  unsigned int l[8];
-  unsigned int num_t;
-  unsigned int t[6];
-} vertex_data;
-
-/*!
- * Additional line data.
- *
- * In addition to the indices of the vertices on the line, we keep
- * track of which triangles use the line.
- */
-typedef struct{
-  on_edge oe;
-  unsigned int t[2];
-} line_data;
-
-/*!
- * Additonal triangle data.
- *
- * In addition to the indices of the vertices of the triangle, we keep
- * track of which lines make up the triangle.
- */
-typedef struct{
-  on_edge oe;
-  unsigned int l[3];
-} triangle_data;
-
-/*!
- * Shell object.
- *
- * This contains all the vertices, lines, and triangles that make up
- * the shell. It consist integers that determine the length of the
- * arrays, and pointers to the arrays of vertices, vertex data, lines,
- * line_data, triangles, and triangle data.
- */
-typedef struct{
-  unsigned int num_v;
-  point *v;
-  vertex_data *vd;
-  unsigned int num_l;
-  line *l;
-  line_data *ld;
-  unsigned int num_t;
-  triangle *t;
-  triangle_data *td;
-} shell;
+#define ROOT3_2 0.86602540378443864676
 
 /*!
  * A constructor for the shell object.
@@ -124,14 +61,14 @@ shell* shell_malloc( unsigned int max_t ){
   }
   s->l = (line *) malloc( max_l*sizeof(line));
   if( s->l == NULL ){ 
-    free( s->vl);
+    free( s->vd);
     free( s->v); 
     free( s);
     return NULL; }
-  s->ld = (line_data *) mallod( max_l*sizeof(line_data));
+  s->ld = (line_data *) malloc( max_l*sizeof(line_data));
   if( s->ld == NULL ){ 
     free( s->l);
-    free( s->vl);
+    free( s->vd);
     free( s->v); 
     free( s);
     return NULL; 
@@ -140,7 +77,7 @@ shell* shell_malloc( unsigned int max_t ){
   if( s->t == NULL ){ 
     free( s->ld);
     free( s->l);
-    free( s->vl);
+    free( s->vd);
     free( s->v); 
     free( s);
     return NULL; 
@@ -150,7 +87,7 @@ shell* shell_malloc( unsigned int max_t ){
     free( s->t);
     free( s->ld);
     free( s->l);
-    free( s->vl);
+    free( s->vd);
     free( s->v); 
     free( s);
     return NULL; 
@@ -163,10 +100,13 @@ shell* shell_malloc( unsigned int max_t ){
  * A copy (clone) method for the shell object.
  */
 void shell_copy( shell *dest, const shell *source){
+  dest->num_v = source->num_v;
   memcpy( dest->v, source->v, source->num_v*sizeof(point));
   memcpy( dest->vd, source->vd, source->num_v*sizeof(vertex_data));
+  dest->num_l = source->num_l;
   memcpy( dest->l, source->l, source->num_l*sizeof(line));
   memcpy( dest->ld, source->ld, source->num_l*sizeof(line_data));
+  dest->num_t = source->num_t;
   memcpy( dest->t, source->t, source->num_t*sizeof(triangle));
   memcpy( dest->td, source->td, source->num_t*sizeof(triangle_data));
 }
@@ -192,15 +132,15 @@ void shell_free( shell *s){
  * pointed to by the pointer `s`. The new vertex is assumed to have no
  * triangle or lines attached when it is added.
  */
-void shell_add_vertex( shell *s, point p){
+ static void add_vertex( shell *s, point p){
   unsigned int n = s->num_v;
-  double *v = s->v;
+  point *v = s->v;
   vertex_data *vd = s->vd;
 
   /* Add the point. */
   v[n] = p;
   /* Initialize the vertex data. */
-  vd[n].oe = on;
+  vd[n].oe = yes;
   vd[n].num_l = 0;
   vd[n].num_t = 0;
   /* Increment the vertex count. */
@@ -216,7 +156,7 @@ void shell_add_vertex( shell *s, point p){
  * position `vi`. It then goes through the triangle and line list and
  * shift indices greater than `vi` down by 1.
  */
- void shell_remove_vertex( shell *s, unsigned int vi){
+ static void remove_vertex( shell *s, unsigned int vi){
   unsigned int i, j;
   unsigned int num_l = s->num_l;
   line *l = s->l;
@@ -235,14 +175,14 @@ void shell_add_vertex( shell *s, point p){
 
   /* For vertex numbers larger than vi, subtract one */
   for( i=0; i<num_l; i++){
-    for( j=0; j<2, j++){
+    for( j=0; j<2; j++){
       if( l[i].i[j] > vi){
         l[i].i[j]--;
       }
     }
   }
   for( i=0; i<num_t; i++){
-    for( j=0; j<3, j++){
+    for( j=0; j<3; j++){
       if( t[i].i[j] > vi){
         t[i].i[j]--;
       }
@@ -258,7 +198,7 @@ void shell_add_vertex( shell *s, point p){
  * `t0`. It assumes that the new line is on the edge, and is only
  * attached to one triangle when it is created.
  */
-void shell_add_line( shell *s, unsigned int i0, unsigned int i1,
+static void add_line( shell *s, unsigned int i0, unsigned int i1,
                     unsigned int t0){
   unsigned int vdn;
   unsigned int n = s->num_l;
@@ -270,7 +210,7 @@ void shell_add_line( shell *s, unsigned int i0, unsigned int i1,
   l[n].i[0] = i0;
   l[n].i[1] = i1;
   /* add the triangle index to the line data */
-  ld[n].oe = on;
+  ld[n].oe = yes;
   ld[n].t[0] = t0;
   /* Increment the line count. */
   s->num_l++;
@@ -283,7 +223,7 @@ void shell_add_line( shell *s, unsigned int i0, unsigned int i1,
   vd[i1].num_l++;
 }
 
-void shell_remove_line( shell *s, unsigned int li){
+static void remove_line( shell *s, unsigned int li){
   unsigned int i, j, vi;
   vertex_data *vd = s->vd;
   line *l = s->l;
@@ -319,10 +259,10 @@ void shell_remove_line( shell *s, unsigned int li){
  * indices `l0`, `l1`, and `l2`. It assumes that the newly created
  * triangle is on the edge.
  */
-void shell_add_triangle( shell *s, unsigned int i0,
-                        unsigned int i1, unsigned int i2,
-                        unsigned int l0, unsigned int l1,
-                        unsigned int l2){
+static void add_triangle( shell *s, unsigned int i0,
+                         unsigned int i1, unsigned int i2,
+                         unsigned int l0, unsigned int l1,
+                         unsigned int l2){
   unsigned int vdn;
   unsigned int n = s->num_t;
   triangle *t = s->t;
@@ -334,7 +274,7 @@ void shell_add_triangle( shell *s, unsigned int i0,
   t[n].i[1] = i1;
   t[n].i[2] = i2;
   /* Set the new triangle data. */
-  td[n].oe = on;
+  td[n].oe = yes;
   td[n].l[0] = l0;
   td[n].l[1] = l1;
   td[n].l[2] = l2;
@@ -353,7 +293,10 @@ void shell_add_triangle( shell *s, unsigned int i0,
   vd[i2].num_t++;
 }
 
-point midpoint( point p1, point p2){
+/*!
+ * Midpoint between two points.
+ */
+static point midpoint( point p1, point p2){
   unsigned int i;
   point p;
   for( i=0; i<3; i++){
@@ -373,9 +316,9 @@ point midpoint( point p1, point p2){
  * - move the new vertex to the midpoint of the two old vertices.
  * - remove old vertices.
  */
-void shell_merge_vertex( shell *s, unsigned int vi0,
-                        unsigned int vi1){
-  unsigned int i, j, vim, vip, li, ti;
+static void merge_vertex( shell *s, unsigned int vi0,
+                         unsigned int vi1){
+  unsigned int i, j, vim, vip, li, ti, n;
   point *v = s->v;
   vertex_data *vd = s->vd;
   line *l = s->l;
@@ -424,8 +367,8 @@ void shell_merge_vertex( shell *s, unsigned int vi0,
   /* Replace v[vim] with the midpoint of the two vertices. */
   v[vim] = midpoint( v[vim], v[vip]);
 
-  /* Remove vertex vip. */
-  shell_remove_vertex( s, vip);
+  /* Remove vertex vip. static */
+  remove_vertex( s, vip);
 }
 
 /*!
@@ -436,7 +379,7 @@ void shell_merge_vertex( shell *s, unsigned int vi0,
  * or `no`. The function works by looping over the lines of the
  * triangle and checking if they are on the edge.
  */
-on_edge shell_triangle_on_edge( const shell *s, unsigned int ti){
+static on_edge triangle_on_edge( const shell *s, unsigned int ti){
   unsigned int j, li;
   triangle_data *td = s->td;
   line_data *ld = s->ld;
@@ -459,7 +402,7 @@ on_edge shell_triangle_on_edge( const shell *s, unsigned int ti){
  * or `no`. The function works by looping over the lines of the
  * vertex and checking if they are on the edge.
  */
-on_edge shell_vertex_on_edge( const shell *s, unsigned int vi){
+static on_edge vertex_on_edge( const shell *s, unsigned int vi){
   unsigned int j, li;
   vertex_data *vd = s->vd;
   line_data *ld = s->ld;
@@ -488,10 +431,10 @@ on_edge shell_vertex_on_edge( const shell *s, unsigned int vi){
  * - possibly moves vertices off the edge,
  * - removes the old line.
  */
-void shell_merge_line( shell *s, unsigned int li0,
-                      unsigned int li1){
-  unsigned int i, j, lim, lip, li, ti, vi, size;
-  vertex_data vd = s->vd;
+static void merge_line( shell *s, unsigned int li0,
+                       unsigned int li1){
+  unsigned int i, j, lim, lip, ti, vi, size;
+  vertex_data *vd = s->vd;
   line *l = s->l;
   line_data *ld = s->ld;
   triangle_data *td = s->td;
@@ -529,21 +472,21 @@ void shell_merge_line( shell *s, unsigned int li0,
   /* Move line `lim` off the edge. */
   ld[lim].oe = no;
   /* Add the triangle from `lip` to `lim`. */
-  ld[lib].t[1] = ti;
+  ld[lim].t[1] = ti;
 
   /* Possibly move the triangles off the edge. */
   for( i=0; i<2; i++){
     ti = ld[lim].t[i];
-    td[ti].oe = shell_triangle_on_edge( s, ti);
+    td[ti].oe = triangle_on_edge( s, ti);
   }
   /* Possible move the vertices off the edge. */
   for( i=0; i<2; i++){
     vi = l[lim].i[0];
-    vd[vi].oe = shell_vertex_on_edge( s, vi);
+    vd[vi].oe = vertex_on_edge( s, vi);
   }
 
   /* remove the line `lip`. */
-  shell_remove_line( s, lip);
+  remove_line( s, lip);
 }
 
 /*!
@@ -554,9 +497,9 @@ void shell_merge_line( shell *s, unsigned int li0,
  */
 void shell_initialize( shell *s){
   /* The three points the define the equilateral triangle. */
-  point p0 = { 0., 0., 0.};
-  point p1 = {0.5, ROOT3_2, 0.}; 
-  point p2 = {1., 0., 0.};
+  point p0 = {{ 0., 0., 0.}};
+  point p1 = {{0.5, ROOT3_2, 0.}}; 
+  point p2 = {{1., 0., 0.}};
  
   /* The shell starts out empty. */
   s->num_v = 0;
@@ -564,44 +507,47 @@ void shell_initialize( shell *s){
   s->num_t = 0;
  
   /* Add the three points. */
-  shell_add_vertex( s, p0);
-  shell_add_vertex( s, p1);
-  shell_add_vertex( s, p2);
+  add_vertex( s, p0);
+  add_vertex( s, p1);
+  add_vertex( s, p2);
   /* Add the three lines. */
   /* We know we start out with triangle 0. */
-  shell_add_line( s, 0, 1, 0);
-  shell_add_line( s, 1, 2, 0);
-  shell_add_line( s, 2, 0, 0);
+  add_line( s, 0, 1, 0);
+  add_line( s, 1, 2, 0);
+  add_line( s, 2, 0, 0);
   /* Add the first triangle. */
-  shell_add_triangle( s, 0, 1, 2, 0, 1, 2);
+  add_triangle( s, 0, 1, 2, 0, 1, 2);
 }
 
 /*!
  *
  */
 void shell_attach( shell *s, point p, unsigned int li){
-  unsigned int vi0, vi1;
+  unsigned int vi0, vi1, ti;
   unsigned int num_v = s->num_v;
   unsigned int num_l = s->num_l;
   unsigned int num_t = s->num_t;
+  line_data *ld = s->ld;
+  triangle_data *td = s->td;
 
   vi0 = s->l[li].i[0];
   vi1 = s->l[li].i[1];
-  shell_add_vertex( s, p);
+  add_vertex( s, p);
   /* Watch the order of the vertices when I add lines. */
-  shell_add_line( s, vi0, num_v, num_t);
-  shell_add_line( s, num_v, vi1, num_t);
+  add_line( s, vi0, num_v, num_t);
+  add_line( s, num_v, vi1, num_t);
   /* Watch the order of the vertices when I add the triangles. */
-  shell_add_triangle( s, vi0, num_v, vi1, num_l, num_l+1, li);
+  add_triangle( s, vi0, num_v, vi1, num_l, num_l+1, li);
 
   ld[li].oe = no;
   ti = ld[li].t[0];
-  td[ti].oe = shell_triangle_on_edge( s, ti);
+  td[ti].oe = triangle_on_edge( s, ti);
 }
 
-void shell_vertex_lines_on_edge(shell *s, unsigned int vi,
-                                unsigned int *lil, unsigned int *lir){
-  unsigned int i;
+static void vertex_lines_on_edge(shell *s, unsigned int vi,
+                                 unsigned int *lil, 
+                                 unsigned int *lir){
+  unsigned int i, li;
   vertex_data *vd = s->vd;
   line_data *ld = s->ld;
   line *l = s->l;
@@ -609,7 +555,7 @@ void shell_vertex_lines_on_edge(shell *s, unsigned int vi,
   for( i=0; i<vd[vi].num_l; i++){
     li = vd[vi].l[i];
     }
-    if( ld[li].oe == yes && l[li].i[1] = vi ){
+    if( ld[li].oe == yes && l[li].i[1] == vi ){
       *lil = li;
     }
     if( ld[li].oe == yes && l[li].i[0] == vi ){
@@ -621,26 +567,28 @@ void shell_vertex_lines_on_edge(shell *s, unsigned int vi,
  * 
  */
 void shell_insert( shell *s, unsigned int vi){
-  unsigned int vi0, vi1;
+  unsigned int vi0, vi1, ti;
   line *l = s->l;
+  unsigned int num_l = s->num_l;
   line_data *ld = s->ld;
-  triangle_data *td = s->td;
+  unsigned int num_t = s->num_t;
   vertex_data *vd = s->vd;
+  triangle_data *td = s->td;
   unsigned int lil = 0, lir = 0;
 
-  shell_vertex_lines_on_edge( s, vi, &lil, &lir);
+  vertex_lines_on_edge( s, vi, &lil, &lir);
   vi0 = l[lil].i[0];
   vi1 = l[lir].i[1];
-  shell_add_line( s, vi0, vi1, num_t);
-  shell_add_triangle( s, vi0, vi1, v1, num_l, lir, lil);
+  add_line( s, vi0, vi1, num_t);
+  add_triangle( s, vi0, vi1, vi, num_l, lir, lil);
 
   ld[lir].oe = no;
   ti = ld[lir].t[0];
-  td[ti].oe = shell_triangle_on_edge( s, ti);
+  td[ti].oe = triangle_on_edge( s, ti);
   ld[lil].oe = no;
   ti = ld[lil].t[0];
-  td[ti].oe = shell_triangle_on_edge( s, ti);
-  vd[vi].oe = shell_vertex_on_edge( s, vi);
+  td[ti].oe = triangle_on_edge( s, ti);
+  vd[vi].oe = vertex_on_edge( s, vi);
 }
 
 /*!
@@ -651,11 +599,11 @@ void shell_close( shell *s, unsigned int vi){
   line *l = s->l;
   unsigned int lil = 0, lir = 0;
 
-  shell_vertex_lines_on_edge( s, vi, &lil, &lir);
+  vertex_lines_on_edge( s, vi, &lil, &lir);
   vi0 = l[lil].i[0];
   vi1 = l[lir].i[1];
-  shell_merge_vertex( s, vi0, vi1);
-  shell_merge_line( s, lil, lir);
+  merge_vertex( s, vi0, vi1);
+  merge_line( s, lil, lir);
 }
 
 /*!
@@ -670,15 +618,20 @@ void shell_join( shell *s, unsigned int li0, unsigned int li1){
   vi10 = l[li1].i[0];
   vi11 = l[li1].i[1];
 
-  shell_merge_vertex( s, vi00, vi11);
-  shell_merge_vertex( s, vi01, vi10);
-  shell_merge_line( s, li0, li1);
+  merge_vertex( s, vi00, vi11);
+  merge_vertex( s, vi01, vi10);
+  merge_line( s, li0, li1);
 }
 
 /*!
  *
  */
 void shell_remove( shell *s, unsigned int ti){
+  unsigned int i, j, vi, li, size;
+  triangle *t = s->t;
+  vertex_data *vd = s->vd;
+  triangle_data *td = s->td;
+  line_data *ld = s->ld;
 
   /* Handle the vertices. */
   for( i=0; i<3; i++){
@@ -686,7 +639,7 @@ void shell_remove( shell *s, unsigned int ti){
     /* Check if this is the only triangle. */
     if( vd[vi].num_t == 1){
       /* If so, remove. */
-      shell_remove_vertex( s, vi);
+      remove_vertex( s, vi);
     }else{
       /* Otherwize remove `ti` from vertex data array. */
       for( j=vd[vi].num_t-1; j>=0; j--){
@@ -706,7 +659,7 @@ void shell_remove( shell *s, unsigned int ti){
     /* Check if each line is on the edge. */
     if( ld[li].oe == yes){
       /* If so, remove. */
-      shell_remove_line( s, li);
+      remove_line( s, li);
     }else{
       /* Otherwize, move it to the edge, */
       /* and remove `ti` from line data array. */
@@ -720,7 +673,7 @@ void shell_remove( shell *s, unsigned int ti){
   /* Finally, remove the triangle from the triangle and */
   /* triangle data arrays. */
   size = s->num_t-ti-1;
-  memmove( &(t[ti]), &(t[ti+1]), size*sizeof(triangle)));
+  memmove( &(t[ti]), &(t[ti+1]), size*sizeof(triangle));
   memmove( &(td[ti]), &(td[ti+1]), size*sizeof(triangle_data));
   /* Decrement triangle counter. */
   s->num_t--;

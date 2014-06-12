@@ -1,0 +1,573 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"n",
+				"n"
+			],
+			[
+				"t",
+				"t"
+			],
+			[
+				"f",
+				"f"
+			],
+			[
+				"l",
+				"l"
+			],
+			[
+				"trian",
+				"triangle_data"
+			],
+			[
+				"num_l",
+				"num_l"
+			],
+			[
+				"oe",
+				"on_edge"
+			],
+			[
+				"li",
+				"li"
+			],
+			[
+				"no",
+				"no"
+			],
+			[
+				"shell_re",
+				"shell_remove_line"
+			],
+			[
+				"shell_me",
+				"shell_merge_line"
+			],
+			[
+				"ti",
+				"ti"
+			],
+			[
+				"num_t",
+				"num_t"
+			],
+			[
+				"v",
+				"v"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"point",
+				"point"
+			],
+			[
+				"obj",
+				"objects"
+			],
+			[
+				"test",
+				"TESTS"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/shell.c",
+			"settings":
+			{
+				"buffer_size": 17297,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/inout.c",
+			"settings":
+			{
+				"buffer_size": 2784,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/inout.h",
+			"settings":
+			{
+				"buffer_size": 374,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/shell.h",
+			"settings":
+			{
+				"buffer_size": 2144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test/shell_example.h",
+			"settings":
+			{
+				"buffer_size": 4552,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test/shell_test.c",
+			"settings":
+			{
+				"buffer_size": 3110,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/Make.sublime-build",
+	"command_palette":
+	{
+		"height": 71.0,
+		"selected_items":
+		[
+			[
+				"buit",
+				"Build: Test"
+			],
+			[
+				"syc",
+				"Set Syntax: C"
+			],
+			[
+				"wr",
+				"Word Wrap: Toggle"
+			],
+			[
+				"but",
+				"Build: Test"
+			],
+			[
+				"bucl",
+				"Build: Clean"
+			],
+			[
+				"bur",
+				"Build: Run"
+			],
+			[
+				"build t",
+				"Build: Test"
+			],
+			[
+				"builtest",
+				"Build: Test"
+			],
+			[
+				"build clean",
+				"Build: Clean"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 435.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/jef/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/jef/builds/templates/medium/Makefile",
+		"/Users/jef/builds/templates/medium/src/dep.h",
+		"/Users/jef/builds/templates/medium/test/function_test.c",
+		"/Users/jef/builds/templates/medium/src/function.c",
+		"/Users/jef/builds/templates/medium/src/medium.c",
+		"/Users/jef/builds/templates/medium/Doxyfile",
+		"/Users/jef/builds/templates/medium/test/function_test.d",
+		"/Users/jef/builds/templates/medium/test/function_test.d.8208",
+		"/Users/jef/builds/templates/medium/src/function_test.c",
+		"/Users/jef/builds/templates/latex/Makefile",
+		"/Users/jef/builds/c_program_template/c_program_template_test.c",
+		"/Users/jef/builds/c_program_template/c_program_template.h",
+		"/Users/jef/builds/c_program_template/c_program_template_function",
+		"/Users/jef/builds/c_program_template/c_program_template.c",
+		"/Users/jef/builds/c_program_template/Makefile",
+		"/Users/jef/builds/lessons/typetest/typetest_test.c",
+		"/Users/jef/builds/lessons/typetest/typetest.c",
+		"/Users/jef/builds/lessons/typetest/Makefile",
+		"/Users/jef/Library/Application Support/Sublime Text 3/Packages/User/Make.sublime-build",
+		"/Users/jef/builds/lessons/typetest/typetest",
+		"/Users/jef/Library/Application Support/Sublime Text 3/Packages/User/Makefile.sublime-settings",
+		"/Users/jef/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"\ns",
+			"[0",
+			"[0]",
+			"= ",
+			"shell_vertex_lines_on_edge",
+			"shell_merge_line",
+			"shell_vertex_on_edge",
+			"shell_triangle_on_edge",
+			"shell_merge_vertex",
+			"shell_add_triangle",
+			"shell_remove_line",
+			"shell_add_line",
+			"}",
+			"shell_remove_vertex",
+			"shell_add_vertex",
+			"triangle",
+			"vi0"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/shell.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 17297,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1468,
+								1468
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 404.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/inout.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2784,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								377,
+								415
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/inout.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 374,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								374,
+								374
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/shell.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1259,
+								1724
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 28.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "test/shell_example.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								869,
+								869
+							],
+							[
+								1171,
+								1171
+							],
+							[
+								1594,
+								1594
+							],
+							[
+								2146,
+								2146
+							],
+							[
+								2843,
+								2843
+							],
+							[
+								3672,
+								3672
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 5,
+					"file": "test/shell_test.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3110,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								302,
+								302
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 48.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 102.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "triangle_shell.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"ty",
+				"typetest.c"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
