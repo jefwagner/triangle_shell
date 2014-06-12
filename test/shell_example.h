@@ -8,6 +8,7 @@
  */
 
 #include "../src/shell.h"
+#include "../src/math_const.h"
 
 /*!
  * Shell s1-s6 contain shells with 1 through 6 triangles.

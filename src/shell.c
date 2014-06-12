@@ -35,8 +35,7 @@
 #include <string.h>
 
 #include "shell.h"
-
-#define ROOT3_2 0.86602540378443864676
+#include "math_const.h"
 
 /*!
  * A constructor for the shell object.

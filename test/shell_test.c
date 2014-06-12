@@ -13,6 +13,7 @@
 #include "../src/shell.c"
 #include "shell_example.h"
 
+
 /*!
  * Square of the distance between two points.
  */
@@ -126,7 +127,7 @@ void shell_copy_test(){
   }else{
     printf( "fail\n");
   }
-  free( s);
+  shell_free( s);
 }
 
 /*!
@@ -153,12 +154,65 @@ void add_vertex_test(){
   }else{
     printf( "fail\n");
   }
-  free( s);
+  shell_free( s);
+}
+
+/*!
+ * `remove_vertex` test.
+ */
+void remove_vertex_test(){
+  int status;
+  shell *s;
+  double tol = 1.e-4;
+
+  printf( "remove_vertex: ");
+  s = shell_malloc( 100);
+  shell_copy( s, &ss2);
+  remove_vertex( s, 0);
+  status = 0.;
+  if( s->num_v != 3){
+    status++;
+  }
+  if( dist_sqr( s->v[0], pp1) > tol){
+    status++;
+  }
+  if( dist_sqr( s->v[1], pp2) > tol){
+    status++;
+  }
+  if( dist_sqr( s->v[2], pp3) > tol){
+    status++;
+  }
+  if( s->l[0].i[1] != 0 ){
+    status++;
+  }
+  if( s->l[1].i[0] != 0 || s->l[1].i[1] != 1 ){
+    status++;
+  }
+
+  if( status == 0){
+    printf( "pass\n");
+  }else{
+    printf( "fail\n");
+  }
+  shell_free( s);
+}
+
+/*!
+ * `add_line` test.
+ */
+void add_line_test(){
+  int status;
+  shell *s;
+
+  printf( "add_line:");
+  s = shell_malloc(100);
+  shell_free(s);
 }
 
 int main(){
   shell_malloc_test();
   shell_copy_test();
   add_vertex_test();
+  remove_vertex_test();
   return 0;
 }
