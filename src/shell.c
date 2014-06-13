@@ -28,6 +28,7 @@
  * - `vertex_on_edge`, find if a vertex is on the edge,
  * - `merge_line`, merge two lines,
  * - `vertex_lines_on_edge`, find edge lines connected to a vertex.
+ * - `align_line`, possibly reorder the points in a line.
  */
 
 #include <stdlib.h>
@@ -223,27 +224,46 @@ static void add_line( shell *s, unsigned int i0, unsigned int i1,
 }
 
 static void remove_line( shell *s, unsigned int li){
-  unsigned int i, j, vi;
+  unsigned int i, j, vi, size, decr;
   vertex_data *vd = s->vd;
   line *l = s->l;
   line_data *ld = s->ld;
-  unsigned int size = s->num_l - li - 1;
+  triangle_data *td = s->td;
 
   for( j=0; j<2; j++){  
   /* Get the vertex indices that contain the line. */
     vi = l[li].i[j];
   /* Remove the reference to the line from the vertex data. */
-    for( i=vd[vi].num_l-1; i>=0; i--){
+    decr = 0;
+    for( i=0; i<vd[vi].num_l; i++){
       if( vd[vi].l[i] == li){
         size = vd[vi].num_l - i -1;
         memmove( &(vd[vi].l[i]), &(vd[vi].l[i+1]), 
                 size*sizeof(unsigned int));
-        vd[vi].num_l--;
+        decr++;
       }
+    }
+    vd[vi].num_l -= decr;
+  }
+
+  /* Decrement all references to lines larger than `li`. */
+  for( i=0; i<s->num_v; i++){
+    for( j=0; j<vd[i].num_l; j++){
+      if( vd[i].l[j] > li){
+        vd[i].l[j]--;
+      }
+    }
+  }
+  for( i=0; i<s->num_t; i++){
+    for( j=0; j<3; j++){
+      if( td[i].l[j] > li ){
+        td[i].l[j]--;
+      } 
     }
   }
 
   /* Shift the rest of the lines down by 1. */
+  size = s->num_l - li - 1;
   memmove( &(l[li]), &(l[li+1]), size*sizeof(line));
   memmove( &(ld[li]), &(ld[li+1]), size*sizeof(line_data));
   /* Decrement the line count. */
@@ -432,7 +452,7 @@ static on_edge vertex_on_edge( const shell *s, unsigned int vi){
  */
 static void merge_line( shell *s, unsigned int li0,
                        unsigned int li1){
-  unsigned int i, j, lim, lip, ti, vi, size;
+  unsigned int i, j, lim, lip, ti, vi, size, decr;
   vertex_data *vd = s->vd;
   line *l = s->l;
   line_data *ld = s->ld;
@@ -449,14 +469,16 @@ static void merge_line( shell *s, unsigned int li0,
   /* Remove `lip` from the vertex data for both vertices. */
   for( i=0; i<2; i++){
     vi = l[lip].i[i];
-    for( j=vd[vi].num_l-1; j>=0; j--){
+    decr = 0;
+    for( j=0; j<vd[vi].num_l; j++){
       if( vd[vi].l[j] == lip ){
         size = vd[vi].num_l-j-1;
         memmove( &(vd[vi].l[j]), &(vd[vi].l[j+1]),
                 size*sizeof(unsigned int));
-        vd[vi].num_l--;
+        decr++;
       }
     }
+    vd[vi].num_l -= decr;
   }
 
   /* Change reference to `lip` in triangle data to `lim`. */
@@ -539,6 +561,7 @@ void shell_attach( shell *s, point p, unsigned int li){
   add_triangle( s, vi0, num_v, vi1, num_l, num_l+1, li);
 
   ld[li].oe = no;
+  ld[li].t[1] = num_t;
   ti = ld[li].t[0];
   td[ti].oe = triangle_on_edge( s, ti);
 }
@@ -553,12 +576,12 @@ static void vertex_lines_on_edge(shell *s, unsigned int vi,
 
   for( i=0; i<vd[vi].num_l; i++){
     li = vd[vi].l[i];
-    }
     if( ld[li].oe == yes && l[li].i[1] == vi ){
       *lil = li;
     }
     if( ld[li].oe == yes && l[li].i[0] == vi ){
       *lir = li;
+    }
   }
 }
 
@@ -582,9 +605,11 @@ void shell_insert( shell *s, unsigned int vi){
   add_triangle( s, vi0, vi1, vi, num_l, lir, lil);
 
   ld[lir].oe = no;
+  ld[lir].t[1] = num_t;
   ti = ld[lir].t[0];
   td[ti].oe = triangle_on_edge( s, ti);
   ld[lil].oe = no;
+  ld[lil].t[1] = num_t;
   ti = ld[lil].t[0];
   td[ti].oe = triangle_on_edge( s, ti);
   vd[vi].oe = vertex_on_edge( s, vi);
@@ -625,11 +650,29 @@ void shell_join( shell *s, unsigned int li0, unsigned int li1){
 /*!
  *
  */
+void align_line( shell *s, unsigned int ti,
+                 unsigned int *v0, unsigned int *v1){
+  if( s->t[ti].i[0] == *v0 && s->t[ti].i[1] == *v1 ){
+    *v0 = s->t[ti].i[1];
+    *v1 = s->t[ti].i[0];
+  }else if( s->t[ti].i[1] == *v0 && s->t[ti].i[2] == *v1 ){
+    *v0 = s->t[ti].i[2];
+    *v1 = s->t[ti].i[1];
+  }else if( s->t[ti].i[2] == *v0 && s->t[ti].i[0] == *v1 ){
+    *v0 = s->t[ti].i[0];
+    *v1 = s->t[ti].i[2];
+  }
+}
+
+/*!
+ *
+ */
 void shell_remove( shell *s, unsigned int ti){
-  unsigned int i, j, vi, li, size;
+  unsigned int i, j, vi, li, size, decr;
   triangle *t = s->t;
   vertex_data *vd = s->vd;
   triangle_data *td = s->td;
+  line *l = s->l;
   line_data *ld = s->ld;
 
   /* Handle the vertices. */
@@ -641,14 +684,18 @@ void shell_remove( shell *s, unsigned int ti){
       remove_vertex( s, vi);
     }else{
       /* Otherwize remove `ti` from vertex data array. */
-      for( j=vd[vi].num_t-1; j>=0; j--){
+      decr = 0;
+      for( j=0; j<vd[vi].num_t; j++){
         if( vd[vi].t[j] == ti ){
-          size = vd[ti].num_t-j-1;
+          size = vd[vi].num_t-j-1;
           memmove( &(vd[ti].t[j]), &(vd[ti].t[j+1]),
                   size*sizeof(unsigned int));
-          vd[ti].num_t--;
+          decr++;
         }
       }
+      vd[vi].num_t -= decr;
+      /* And set on the edge. */
+      vd[vi].oe = yes;
     }
   }
 
@@ -661,11 +708,34 @@ void shell_remove( shell *s, unsigned int ti){
       remove_line( s, li);
     }else{
       /* Otherwize, move it to the edge, */
+      ld[li].oe = yes;
       /* and remove `ti` from line data array. */
       if( ld[li].t[0] == ti ){
         ld[li].t[0] = ld[li].t[1];
       }
-      ld[li].oe = yes;
+      /* Move the neighboring triangle to the edge. */
+      td[ld[li].t[0]].oe = yes;
+      /* And reorder the vertex indices in the line. */
+      align_line(s, ti, &l[li].i[0], &l[li].i[1]);
+    }
+  }
+
+  /* Decrement references to triangles larger than `ti`. */
+  for( i=0; i<s->num_v; i++){
+    for( j=0; j<vd[i].num_t; j++){
+      if( vd[i].t[j] > ti){
+        vd[i].t[j]--;
+      }
+    }
+  }
+  for( i=0; i<s->num_l; i++){
+    if( ld[i].t[0] > ti){
+      ld[i].t[0]--;
+    }
+    if( ld[i].oe == no){
+      if( ld[i].t[1] > ti){
+        ld[i].t[1]--;
+      }
     }
   }
 

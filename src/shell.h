@@ -1,5 +1,12 @@
+/*!*******************************************************************
+ * \author Jef Wagner
+ * \email jefwagner@gmail.com
+ *********************************************************************
+ */
 /*!
- * 
+ * Header file that contains the shell data structure and the
+ * prototypes of the exported functions. See file `shell.c` for a
+ * description of the functions.
  */
 #ifndef JW_SHELL
 #define JW_SHELL
@@ -87,6 +94,9 @@ typedef struct{
   triangle_data *td;
 } shell;
 
+/*!
+ * Prototypes of the public functions.
+ */
 shell* shell_malloc( unsigned int max_t );
 void shell_copy( shell *dest, const shell *source);
 void shell_free( shell *s);

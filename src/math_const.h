@@ -13,4 +13,7 @@
 #define ONE_E 0.36787944117144232160
 #define PI_180 0.017453292519943295769
 
+#define min(x,y) ((x)<(y)?(x):(y))
+#define max(x,y) ((x)>(y)?(x):(y))
+
 #endif
