@@ -5,5 +5,12 @@
 			"follow_symlinks": true,
 			"path": "."
 		}
-	]
+	],
+  "settings":
+   {
+      "sublimegdb_commandline": "ggdb --interpreter=mi ./inout_test",
+      "sublimegdb_workingdir": "${folder:${project_path:test}}"
+//      "sublimegdb_exec_cmd": "-exec-run",
+//      "sublimegdb_i_know_how_to_use_gdb_thank_you_very_much": true
+   }
 }

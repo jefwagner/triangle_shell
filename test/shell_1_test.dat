@@ -1,0 +1,105 @@
+Vertex Data 7
+Positions 
+   x      y      z  
+0.000000e+00 0.000000e+00 0.000000e+00 
+5.000000e-01 8.660254e-01 0.000000e+00 
+1.000000e+00 0.000000e+00 0.000000e+00 
+-5.000000e-01 8.660254e-01 0.000000e+00 
+0.000000e+00 1.732051e+00 0.000000e+00 
+1.000000e+00 1.732051e+00 0.000000e+00 
+1.500000e+00 8.660254e-01 0.000000e+00 
+Vertex on edge 
+true/false
+true
+false
+true
+true
+true
+true
+true
+Lines containing vertex
+num_l l0 l1 ...
+3 0 2 3 
+6 0 1 4 6 8 10 
+3 1 2 11 
+3 3 4 5 
+3 5 6 7 
+3 7 8 9 
+3 9 10 11 
+Triangles containing vertex
+num_t t0 t1 ...
+2 0 1 
+6 0 1 2 3 4 5 
+2 0 5 
+2 1 2 
+2 2 3 
+2 3 4 
+2 4 5 
+Line Data 12
+Vertex indices 
+v0 v1 
+0 1
+1 2
+2 0
+0 3
+3 1
+3 4
+4 1
+4 5
+5 1
+5 6
+6 1
+6 2
+Line on edge 
+true/false
+false
+false
+true
+true
+false
+true
+false
+true
+false
+true
+false
+true
+Triangles containing line
+t0 [t1]
+0 1
+0 5
+0
+1
+1 2
+2
+2 3
+3
+3 4
+4
+4 5
+5
+Triangle Data 6
+Vertex indices 
+v0 v1 v2
+0 1 2
+0 3 1
+3 4 1
+4 5 1
+5 6 1
+6 2 1
+Triangle on edge 
+true/false
+true
+true
+true
+true
+true
+true
+Lines on triangle
+l0 l1 l2
+0 1 2
+3 4 0
+5 6 4
+7 8 6
+9 10 8
+11 1 10
