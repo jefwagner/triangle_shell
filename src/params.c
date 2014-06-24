@@ -309,7 +309,7 @@ int pdata_get_var_s( pdata *pd, const char *name, char *val){
 /*!
  * Get the number of elements stored under the key `name`.
  */
-int pdata_listlength( pdata *pd, const char *name){
+int pdata_array_length( pdata *pd, const char *name){
   int i=0;
   char name_iter[80];
   char str[80];
@@ -361,6 +361,52 @@ int pdata_get_array_s( pdata *pd, const char *name, char **val){
     sprintf( name_iter, "%s___%03d", name, i);
   }
   return i;
+}
+
+/*!
+ * Get an element from an array of double/integers/strings from pdata.
+ *
+ * These functions do a series of table lookups and fill up and array
+ * pointed to by the appropriate pointer.
+ */
+int pdata_get_element_d( pdata *pd, const char *name, 
+                        unsigned int i, double *val){
+  char name_iter[80];
+  char str[80];
+  sprintf( name_iter, "%s___%03d", name, i);
+
+  if( hashtab_find( pd, name_iter, str) == HT_SUCCESS){
+    *val = atof( str);
+    return PDATA_SUCCESS;
+  }else{
+    return PDATA_FAILURE;
+  }
+}
+int pdata_get_element_i( pdata *pd, const char *name, 
+                        unsigned int i, int *val){
+  char name_iter[80];
+  char str[80];
+  sprintf( name_iter, "%s___%03d", name, i);
+
+  if( hashtab_find( pd, name_iter, str) == HT_SUCCESS){
+    *val = atoi( str);
+    return PDATA_SUCCESS;
+  }else{
+    return PDATA_FAILURE;
+  }
+}
+int pdata_get_element_s( pdata *pd, const char *name, 
+                        unsigned int i, char *val){
+  char name_iter[80];
+  char str[80];
+  sprintf( name_iter, "%s___%03d", name, i);
+
+  if( hashtab_find( pd, name_iter, str) == HT_SUCCESS){
+    strcpy( val, str);
+    return PDATA_SUCCESS;
+  }else{
+    return PDATA_FAILURE;
+  }
 }
 
 /*!

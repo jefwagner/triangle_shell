@@ -10,9 +10,11 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "shell.h"
 #include "inout.h"
+#include "math_const.h"
 
 void shell_write( shell *s, FILE *f){
   unsigned int i, j;
@@ -345,50 +347,138 @@ int shell_read( shell *s, FILE *f){
     }
   }
 
-
   return INOUT_SUCCESS;
 }
 
-int read_param_file( shell_params *sp, FILE *file){
-  int i, k, n[10];
-  int tmp_i, tmp_i_array[100];
-  double tmp_d, tmp_d_array[100];
+/*!
+ * Read the parameter file.
+ *
+ * This reads in the parameters when they exist from a parameter file.
+ * All variables are treated as if they are read in from list. The
+ * integer parameter chooses from the list, where the first variable
+ * listed is the least significant to the most significant.
+ */
+ #define ND 6
+ #define NI 1
+int read_param_file( shell_params *sp, FILE *file, unsigned int n){
+  int i, k, 
+  int nd[ND], ni[NI], sd[ND], si[NI], 
+  int id[ND], ii[ND], tmp_n, nd_tot;
+  int tmp_i, n_tot;
+  double tmp_d;
   pdata pd;
-  double *var_d[6];
+  double *var_d[6], r_0;
   int *var_i[1];
-  const char *var_d_names[] = { "gamma", "th0", "sigma", 
-  "r_membrane", "r_genome", "delta_b"};
-  const char *var_i_names[] = { "seed"};
+  /* List out the names of the parameters in the parameter file. */
+  const char *var_d_names[] = { 
+    "gamma", 
+    "r_0", 
+    "sigma", 
+    "r_membrane", 
+    "r_genome", 
+    "delta_b"
+  };
+  const char *var_i_names[] = { 
+    "seed"
+  };
+  /* List out pointers to the parameter in the program. */
   var_d[0] = &(sp->gamma);
-  var_d[1] = &(sp->th0);
+  var_d[1] = &r_0;
   var_d[2] = &(sp->sigma);
   var_d[3] = &(sp->r_membrane);
   var_d[4] = &(sp->r_genome);
   var_d[5] = &(sp->delta_b);
   var_i[0] = &(sp->seed);
 
-  pdata_read_file( &pd, file);
-  for( i=0; i<n; i++){
-    status = pdata_get_var_d( &pd, var_d_names[i], &tmp);
-    if( status == PDATA_SUCCESS){
-      *(var_d[i]) = tmp;
+  /* First give the default parameters */
+  sp->gamma = 2;
+  r_0 = 1.1;
+  sp->sigma = 1.e-4;
+  sp->r_membrane = 10;
+  sp->r_genome = 2.5;
+  sp->delta_b = 0.8;
+  sp->seed = n*1000;
+
+  /* read the parameter file */
+  if( pdata_read_file( &pd, file) == PDATA_FORMAT_ERROR ){
+    return INOUT_FORMAT_ERROR;
+  }
+
+  /* get the number of each parameter */
+  for( k=0; k<ND; k++){
+    nd[k] = 0;
+    sd[k] = pdata_get_var_d( &pd, var_d_names[k], &tmp_d);
+    if( sd[k] == pdata_success){
+      nd[k] = 1;
     }
-    n[k] = pdata_get_array_d( &pd, var_d_names[i], tmp_d_array);
+    nd[k] = pdata_listlength( &pd, var_d_names[k]);
   }
-  status = pdata_get_var_d( &pd, "gamma", &tmp);
-  if( status == PDATA_SUCCESS ){
-    sp->gamma = tmp;
+  for( k=0; k<NI; k++){
+    ni[k] = 0;
+    si[k] = pdata_get_var_i( &pd, var_i_names[k], &tmp_i);
+    if( si[k] == pdata_success){
+      ni[k] = 1;
+    }
+    ni[k] = pdata_listlength( &pd, var_i_names[k]);
   }
-  status = pdata_get_var_d( &pd, "th0", &tmp);
-  if( status == PDATA_SUCCESS ){
-    sp->th0 = PI_180*tmp;
+  /* Check that n < n_tot */
+  n_tot = 1;
+  for( k=0; k<ND; k++){
+    if( nd[k] != 0 ){
+      n_tot *= nd[k];
+    }
   }
-  status = pdata_get_var_d( &pd, "delta_b", &tmp);
-  if( status == PDATA_SUCCESS ){
-    sp->delta_b = tmp;
+  for( k=0; k<NI; k++){
+    if( ni[k] != 0 ){
+      n_tot *= ni[k];
+    }
   }
-  status = pdata_get_var_d( &pd, "sigma", &tmp);
-  if( status == PDATA_SUCCESS ){
-    sp->sigma = tmp;
+  if( n > n_tot ){
+    return INOUT_OUT_OF_BOUNDS;
   }
+  /* Find the index for each parameter */
+  tmp_n = n;
+  for( k=0; k<ND; k++){
+    if( nd[k] != 0 ){
+      id[k] = tmp_n%nd[k];
+      tmp_n /= nd[k];
+    }else{
+      id[k] = -1;
+    }
+  }
+  for( k=0; k<NI; k++){
+    if( ni[k] != 0 ){
+      ii[k] = tmp_n%ni[k];
+      tmp_n /= ni[k];
+    }else{
+      ii[k] = -1;
+    }
+  }
+  /* Read each parameter */
+  for( k=0; k<ND; k++){
+    if( nd[k] != 0){
+      if( sd[k] == PDATA_SUCCESS){
+        pdata_get_var_d( &pd, var_d_names[k], var_d[k])]
+      }else{
+        pdata_get_element_d( &pd, var_d_names[k], id[k], var_d[k]);
+      }
+    }
+  }
+  for( k=0; k<ND; k++){
+    if( nd[k] != 0){
+      if( sd[k] == PDATA_SUCCESS){
+        pdata_get_var_d( &pd, var_d_names[k], var_d[k])]
+      }else{
+        pdata_get_element_d( &pd, var_d_names[k], id[k], var_d[k]);
+      }
+    }
+  }
+
+  /* Treat the data */
+  /* Translate from r_0 to th0 */
+  sp->th0 = 2*asin(1./sqrt(12.*r_0*r_0-3.));
+  /* Change sigma into radians */
+  sp->sigma *= PI_180;
+
+  return INOUT_SUCCESS;
 }

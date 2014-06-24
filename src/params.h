@@ -48,10 +48,17 @@ int pdata_get_var_d( pdata *pd, const char *name, double *val);
 int pdata_get_var_i( pdata *pd, const char *name, int *val);
 int pdata_get_var_s( pdata *pd, const char *name, char *val);
 
-int pdata_listlength( pdata *pd, const char *name);
+int pdata_array_length( pdata *pd, const char *name);
 int pdata_get_array_d( pdata *pd, const char *name, double *val);
 int pdata_get_array_i( pdata *pd, const char *name, int *val);
 int pdata_get_array_s( pdata *pd, const char *name, char **val);
+
+int pdata_get_element_d( pdata *pd, const char *name, 
+                        unsigned int i, double *val);
+int pdata_get_element_i( pdata *pd, const char *name, 
+                        unsigned int i, int *val);
+int pdata_get_element_s( pdata *pd, const char *name, 
+                        unsigned int i, char *val);
 
 int pdata_get_list( pdata *pd, const char *name, int num, ...);
 

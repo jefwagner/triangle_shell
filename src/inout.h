@@ -10,6 +10,7 @@
 #ifndef JW_INOUT
 #define JW_INOUT
 
+#define INOUT_OUT_OF_BOUNDS -2
 #define INOUT_FORMAT_ERROR -1
 #define INOUT_SUCCESS 0
 
