@@ -53,10 +53,11 @@ list sigma 1.e-4 30
 list r_0 1.0 1.5
 ```
 then there are 2^3=8 total options, and the simulation number can
-range from 0 to 7. Specifically, the table below gives the values taken on for each of the simulation numbers.
--------------------------------------------
+range from 0 to 7. Specifically, the table below gives the values
+taken on for each of the simulation numbers.
+
 | simulation_number | gamma | r_0 | sigma |
--------------------------------------------
+|-------------------|:-----:|:---:|:-----:|
 |                 0 |     1 | 1.0 | 1.e-4 |
 |                 1 |     2 | 1.0 | 1.e-4 |
 |                 2 |     1 | 1.5 | 1.e-4 |
@@ -65,4 +66,3 @@ range from 0 to 7. Specifically, the table below gives the values taken on for e
 |                 5 |     2 | 1.0 |    30 |
 |                 6 |     1 | 1.5 |    30 |
 |                 7 |     2 | 1.5 |    30 |
--------------------------------------------
