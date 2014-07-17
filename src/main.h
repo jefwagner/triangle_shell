@@ -9,6 +9,8 @@
 #ifndef JW_MAIN
 #define JW_MAIN
 
+#include "shell.h"
+
 typedef struct {
   double gamma;
   double th0;

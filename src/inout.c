@@ -12,8 +12,10 @@
 #include <string.h>
 #include <math.h>
 
+#include "main.h"
 #include "shell.h"
 #include "inout.h"
+#include "params.h"
 #include "math_const.h"
 
 void shell_write( shell *s, FILE *f){
@@ -361,9 +363,9 @@ int shell_read( shell *s, FILE *f){
  #define ND 6
  #define NI 1
 int read_param_file( shell_params *sp, FILE *file, unsigned int n){
-  int i, k, 
-  int nd[ND], ni[NI], sd[ND], si[NI], 
-  int id[ND], ii[ND], tmp_n, nd_tot;
+  int k; 
+  int nd[ND], ni[NI], sd[ND], si[NI]; 
+  int id[ND], ii[ND], tmp_n;
   int tmp_i, n_tot;
   double tmp_d;
   pdata pd;
@@ -400,7 +402,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   sp->seed = n*1000;
 
   /* read the parameter file */
-  if( pdata_read_file( &pd, file) == PDATA_FORMAT_ERROR ){
+  if( pdata_read_file( &pd, file) == PDATA_FORMAT ){
     return INOUT_FORMAT_ERROR;
   }
 
@@ -408,18 +410,18 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   for( k=0; k<ND; k++){
     nd[k] = 0;
     sd[k] = pdata_get_var_d( &pd, var_d_names[k], &tmp_d);
-    if( sd[k] == pdata_success){
+    if( sd[k] == PDATA_SUCCESS){
       nd[k] = 1;
     }
-    nd[k] = pdata_listlength( &pd, var_d_names[k]);
+    nd[k] = pdata_array_length( &pd, var_d_names[k]);
   }
   for( k=0; k<NI; k++){
     ni[k] = 0;
     si[k] = pdata_get_var_i( &pd, var_i_names[k], &tmp_i);
-    if( si[k] == pdata_success){
+    if( si[k] == PDATA_SUCCESS){
       ni[k] = 1;
     }
-    ni[k] = pdata_listlength( &pd, var_i_names[k]);
+    ni[k] = pdata_array_length( &pd, var_i_names[k]);
   }
   /* Check that n < n_tot */
   n_tot = 1;
@@ -433,7 +435,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
       n_tot *= ni[k];
     }
   }
-  if( n > n_tot ){
+  if( n >= n_tot ){
     return INOUT_OUT_OF_BOUNDS;
   }
   /* Find the index for each parameter */
@@ -458,18 +460,18 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   for( k=0; k<ND; k++){
     if( nd[k] != 0){
       if( sd[k] == PDATA_SUCCESS){
-        pdata_get_var_d( &pd, var_d_names[k], var_d[k])]
+        pdata_get_var_d( &pd, var_d_names[k], var_d[k]);
       }else{
         pdata_get_element_d( &pd, var_d_names[k], id[k], var_d[k]);
       }
     }
   }
-  for( k=0; k<ND; k++){
-    if( nd[k] != 0){
-      if( sd[k] == PDATA_SUCCESS){
-        pdata_get_var_d( &pd, var_d_names[k], var_d[k])]
+  for( k=0; k<NI; k++){
+    if( ni[k] != 0){
+      if( si[k] == PDATA_SUCCESS){
+        pdata_get_var_i( &pd, var_i_names[k], var_i[k]);
       }else{
-        pdata_get_element_d( &pd, var_d_names[k], id[k], var_d[k]);
+        pdata_get_element_i( &pd, var_i_names[k], ii[k], var_i[k]);
       }
     }
   }

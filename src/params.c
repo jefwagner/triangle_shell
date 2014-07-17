@@ -313,10 +313,11 @@ int pdata_array_length( pdata *pd, const char *name){
   int i=0;
   char name_iter[80];
   char str[80];
-  do{
-    sprintf( name_iter, "%s___%03d", name, i);
+  sprintf( name_iter, "%s___%03d", name, i);
+  while( hashtab_find( pd, name_iter, str) == HT_SUCCESS ){
     i++;
-  }while( hashtab_find( pd, name_iter, str) == HT_SUCCESS );
+    sprintf( name_iter, "%s___%03d", name, i);
+  };
   return i;
 }
 
