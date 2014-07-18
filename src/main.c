@@ -23,33 +23,37 @@ void usage( char* argv0){
   fprintf( stdout, "See the README for full details\n");
 }
 
-int main( int argc, char **argv){
-  int n, status;
-  char parameter_filename[80];
-  shell_run sr;
-  shell_params sp;
-  FILE *f;
-
+int get_cl_args( int argc, const char **argv,
+                   char *parameter_filename, int *n){
+  int status;
   switch( argc){
     case 2:
       strcpy( parameter_filename, argv[1]);
-      n = 0;
+      *n = 0;
+      status = 0;
       break;
     case 3:
       strcpy( parameter_filename, argv[1]);
-      n = atoi( argv[2]);
+      *n = atoi( argv[2]);
+      status = 0;
       break;
     case 1:
       fprintf( stderr, "Must provide parmeter filename.\n");
       usage( argv[0]);
-      return 1;
+      status = 1;
+      break;
     default:
       fprintf( stderr, "Too many command line arguments.\n");
       usage( argv[0]);
-      return 1;
+      status = 1;
+      break;
   }
+  return status;
+}
 
-  f = fopen( parameter_filename, "r");
+int get_params( const char *parameter_filename, FILE *f,
+                 shell_params *sp){
+  int status;
   if( f == NULL ){
     fprintf( stderr, "Could not open the parameter file %s.\n",
             parameter_filename);
@@ -68,7 +72,27 @@ int main( int argc, char **argv){
     usage( argv[0]);
     return 1;
   }
+  return 0;
+}
+
+int main( int argc, char **argv){
+  int n, status;
+  char parameter_filename[80];
+  shell_run sr;
+  shell_params sp;
+  FILE *f;
+
+  status = get_cl_args( argc, argv, parameter_filename, &n);
+  if( status != 0){
+    return status;
+  }
+
+  f = fopen( parameter_filename, "r");
+  status = get_params( parameter_filename, f, &sp);
   fclose( f);
+  if( status != 0){
+    return status;
+  }
 
   printf( "%1.3f %1.3f %1.3f %1.3f %1.3f %1.3f %u\n",
          sp.gamma, sp.th0, sp.sigma, sp.r_membrane,
