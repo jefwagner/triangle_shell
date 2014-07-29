@@ -17,6 +17,7 @@
 #include "inout.h"
 #include "cg.h"
 #include "relax.h"
+#include "grow.h"
 
 #define MAX_TRI 100
 
@@ -124,6 +125,19 @@ int main( int argc, const char **argv){
   n = relax( &sr);
   printf( "Found minimum energy %1.3f after %u evaluations\n",
          sr.hmin, n);
+  n = grow( &sr);
+  printf( "Grow step.\n");
+  shell_write( sr.s, stdout);
+  n = relax( &sr);
+  printf( "Found minimum energy %1.3f after %u evaluations\n",
+         sr.hmin, n);
+  shell_write( sr.s, stdout);
+  n = grow( &sr);
+  printf( "Grow step.\n");
+  n = relax( &sr);
+  printf( "Found minimum energy %1.3f after %u evaluations\n",
+         sr.hmin, n);
+
 
   nlcg_free( sr.nlcg);
   shell_free( sr.s);
