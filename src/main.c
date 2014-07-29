@@ -16,10 +16,11 @@
 #include "main.h"
 #include "inout.h"
 #include "cg.h"
+#include "relax.h"
 
 #define MAX_TRI 100
 
-void usage( char* argv0){
+void usage( const char* argv0){
   fprintf( stdout, "%s parameter_filename [simulation_number]\n", argv0);
   fprintf( stdout, "See the README for full details\n");
 }
@@ -40,12 +41,10 @@ int get_cl_args( int argc, const char **argv,
       break;
     case 1:
       fprintf( stderr, "Must provide parmeter filename.\n");
-      usage( argv[0]);
       status = 1;
       break;
     default:
       fprintf( stderr, "Too many command line arguments.\n");
-      usage( argv[0]);
       status = 1;
       break;
   }
@@ -53,30 +52,27 @@ int get_cl_args( int argc, const char **argv,
 }
 
 int get_params( const char *parameter_filename, FILE *f,
-                 shell_params *sp){
+               int n, shell_params *sp){
   int status;
   if( f == NULL ){
     fprintf( stderr, "Could not open the parameter file %s.\n",
             parameter_filename);
-    usage( argv[0]);
     return 1;
   }
-  status = read_param_file( &sp, f, n);
+  status = read_param_file( sp, f, n);
   if( status == INOUT_OUT_OF_BOUNDS ){
     fprintf( stderr, "Simulation number out of bounds.\n");
-    usage( argv[0]);
     return 1;
   }
   if( status == INOUT_FORMAT_ERROR ){
     fprintf( stderr, "Error parsing parameter file.\n");
     fprintf( stderr, "Please see README for formatting instructuions.\n");
-    usage( argv[0]);
     return 1;
   }
   return 0;
 }
 
-int main( int argc, char **argv){
+int main( int argc, const char **argv){
   int n, status;
   char parameter_filename[80];
   shell_run sr;
@@ -85,13 +81,15 @@ int main( int argc, char **argv){
 
   status = get_cl_args( argc, argv, parameter_filename, &n);
   if( status != 0){
+    usage( argv[0]);
     return status;
   }
 
   f = fopen( parameter_filename, "r");
-  status = get_params( parameter_filename, f, &sp);
+  status = get_params( parameter_filename, f, n, &sp);
   fclose( f);
   if( status != 0){
+    usage( argv[0]);
     return status;
   }
 
@@ -108,11 +106,26 @@ int main( int argc, char **argv){
   // printf( "seed = %u\n", sp.seed);
 
   sr.sp = &sp;
+
   sr.s = shell_malloc( MAX_TRI);
+  if( sr.s == NULL ){
+    return 1;
+  }
+
+  sr.nlcg = nlcg_malloc( MAX_TRI);
+  if( sr.nlcg == NULL ){
+    free( sr.s);
+    return 1;
+  }
 
   shell_initialize( sr.s);
-  
+  nlcg_set_tol( 0., 0., 1.e-4, 50000, sr.nlcg);
 
+  n = relax( &sr);
+  printf( "Found minimum energy %1.3f after %u evaluations\n",
+         sr.hmin, n);
+
+  nlcg_free( sr.nlcg);
   shell_free( sr.s);
 
   return 0;

@@ -390,7 +390,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   var_d[3] = &(sp->r_membrane);
   var_d[4] = &(sp->r_genome);
   var_d[5] = &(sp->delta_b);
-  var_i[0] = &(sp->seed);
+  var_i[0] = (int *) &(sp->seed);
 
   /* First give the default parameters */
   sp->gamma = 2;

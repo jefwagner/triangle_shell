@@ -4,14 +4,15 @@
  *********************************************************************
  */
 /*!
- * This file contains the prototype for the energy function.
+ * This file contains the calculation of the elastic energy of the
+ * shell.
  */
-#ifndef JW_ENERGY
-#define JW_ENERGY
+
+#ifndef JW_RELAX
+#define JW_RELAX
 
 #include "main.h"
 
- double energy_shell( const shell *s, const shell_params *sp,
-                     double *dx);
+int relax( shell_run *sr );
 
 #endif

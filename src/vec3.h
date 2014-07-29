@@ -1,5 +1,7 @@
 #include <math.h>
 
+#include "math_const.h"
+
 /* /\* 3-vector operations *\/ */
 /* static inline double dot( const double *x1, const double *x2); */
 /* static inline void cross( const double *x1, const double *x2, double *xout); */
@@ -178,7 +180,7 @@ static inline void hat_vec( const double *x, double *xout)
   int i;
   double tmag;
   tmag = mag( x);
-  if( mag == 0. ){
+  if( tmag == 0. ){
     xout[0] = 1.;
     xout[1] = 0.;
     xout[2] = 0.;

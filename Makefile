@@ -94,11 +94,11 @@ all: test $(PROGRAM) docs
 
 # 
 clean:
-	rm $(ODIR)/*
-	rm $(TDIR)/*_test 
-	rm $(TDIR)/*.o 
-	rm $(TDIR)/*.d 
-	rm $(PROGRAM)
+	rm -f $(ODIR)/*
+	rm -f $(TDIR)/*_test 
+	rm -f $(TDIR)/*.o 
+	rm -f $(TDIR)/*.d 
+	rm -f $(PROGRAM)
 
 test: $(TESTS)
 

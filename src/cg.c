@@ -108,8 +108,8 @@ struct nlcg_ws_struct{
 static double opt_fn_eval( const double *x, double *dfdx, opt_fn *of);
 static double lin_fn_eval( double a, double *dfda, lin_fn *lf);
 static double sw_line_search( double f, lin_fn *lf);
-static double interpolate_qls( double a0, double f0, double df0,
-			      double a1, double f1, double df1 );
+// static double interpolate_qls( double a0, double f0, double df0,
+// 			      double a1, double f1, double df1 );
 static double sw_bracket_search( double f_0, double df_0,
 				 double a_lo, double f_lo, double df_lo,
 				 double a_hi, double f_hi, double df_hi,
@@ -430,24 +430,25 @@ static double sw_bracket_search( double f_0, double df_0,
  * iterpolation is based on a least square fit of the bracketing
  * values and derivatives to the parameters of a quadratic function.
  */
-static double interpolate_qls( double a0, double f0, double df0,
-			       double a1, double f1, double df1 ){
-  double Da, Df, Ddf, result, adjust;
-  /* Difference of points, values, and derivatives */
-  Da = a1-a0;
-  Df = f1-f0;
-  Ddf = df1-df0;
-  /* Start with the bisection */
-  result = 0.5*(a1+a0);
-  /* As long as we have a minimum */
-  if( df0*df1 < 0 && Ddf*Da >0 ){
-    adjust = (2.*(df1+df0)+Df*Da)/(Ddf*(4.+Da*Da));
-    if( -0.49 < adjust && adjust < 0.49 ){
-      result -= Da*adjust;
-    }
-  }
-  return result;
-}
+// static double interpolate_qls( double a0, double f0, double df0,
+// 			       double a1, double f1, double df1 ){
+//   double Da, Df, Ddf, result, adjust;
+//   /* Difference of points, values, and derivatives */
+//   Da = a1-a0;
+//   Df = f1-f0;
+//   Ddf = df1-df0;
+//   /* Start with the bisection */
+//   result = 0.5*(a1+a0);
+//   /* As long as we have a minimum */
+//   if( df0*df1 < 0 && Ddf*Da >0 ){
+//     adjust = (2.*(df1+df0)+Df*Da)/(Ddf*(4.+Da*Da));
+//     if( -0.49 < adjust && adjust < 0.49 ){
+//       result -= Da*adjust;
+//     }
+//   }
+//   return result;
+// }
+
 
 /*!
  * Optimization function evaluation.
