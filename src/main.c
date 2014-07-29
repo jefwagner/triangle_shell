@@ -15,6 +15,7 @@
 
 #include "main.h"
 #include "inout.h"
+#include "cg.h"
 
 #define MAX_TRI 100
 
@@ -108,6 +109,9 @@ int main( int argc, char **argv){
 
   sr.sp = &sp;
   sr.s = shell_malloc( MAX_TRI);
+
+  shell_initialize( sr.s);
+  
 
   shell_free( sr.s);
 

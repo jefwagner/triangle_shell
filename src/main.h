@@ -10,6 +10,7 @@
 #define JW_MAIN
 
 #include "shell.h"
+#include "cg.h"
 
 typedef struct {
   double gamma;
@@ -24,6 +25,8 @@ typedef struct {
 typedef struct {
   shell *s;
   shell_params *sp;
+  nlcg_ws nlcg;
+  double hmin;
 } shell_run;
 
 #endif
