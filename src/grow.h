@@ -10,6 +10,8 @@
 #ifndef JW_GROW
 #define JW_GROW
 
+#include "main.h"
+
 int grow( shell_run *sr );
 
 #endif

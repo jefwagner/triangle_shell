@@ -20,5 +20,7 @@
 void shell_write( shell *s, FILE *f);
 int shell_read( shell *s, FILE *f);
 int read_param_file( shell_params *sp, FILE *f, unsigned int n);
+void shell_params_write( shell_params *sp, FILE *file,
+                        const char *filename, unsigned int n);
 
 #endif

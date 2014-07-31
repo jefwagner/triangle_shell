@@ -27,7 +27,6 @@
  * - `triangle_on_edge`, find if a triangle is on the edge,
  * - `vertex_on_edge`, find if a vertex is on the edge,
  * - `merge_line`, merge two lines,
- * - `vertex_lines_on_edge`, find edge lines connected to a vertex.
  * - `align_line`, possibly reorder the points in a line.
  */
 
@@ -564,25 +563,6 @@ void shell_attach( shell *s, point p, unsigned int li){
   ld[li].t[1] = num_t;
   ti = ld[li].t[0];
   td[ti].oe = triangle_on_edge( s, ti);
-}
-
-static void vertex_lines_on_edge(shell *s, unsigned int vi,
-                                 unsigned int *lil, 
-                                 unsigned int *lir){
-  unsigned int i, li;
-  vertex_data *vd = s->vd;
-  line_data *ld = s->ld;
-  line *l = s->l;
-
-  for( i=0; i<vd[vi].num_l; i++){
-    li = vd[vi].l[i];
-    if( ld[li].oe == yes && l[li].i[1] == vi ){
-      *lil = li;
-    }
-    if( ld[li].oe == yes && l[li].i[0] == vi ){
-      *lir = li;
-    }
-  }
 }
 
 /*!

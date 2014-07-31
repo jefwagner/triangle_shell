@@ -12,6 +12,29 @@
 #include "shell.h"
 #include "cg.h"
 
+/*!
+ * A move type enum.
+ *
+ * There are two move types: a vertex move, and a line move, (in the
+ * future there will be a third type: a triangle move).
+ */
+typedef enum{ vertex_move, line_move} move_type;
+
+/*!
+ * A data structure to hold info for a move.
+ *
+ * This data structure holds the relevant infomation for a move. The
+ * type of move, the index for the move, and a floating point number
+ * associated with the probablity of that move occuring. Currently the
+ * floating point number is an angle. In the future it should probably
+ * be an energy associated with the move.
+ */
+typedef struct{
+  move_type type;
+  unsigned int index;
+  double angle;
+} move;
+
 typedef struct {
   double gamma;
   double th0;
@@ -20,6 +43,7 @@ typedef struct {
   double r_genome;
   double delta_b;
   unsigned int seed;
+  unsigned int movie;
 } shell_params;
 
 typedef struct {
@@ -27,6 +51,7 @@ typedef struct {
   shell_params *sp;
   nlcg_ws nlcg;
   double hmin;
+  move *ml;
 } shell_run;
 
 #endif

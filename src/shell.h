@@ -107,5 +107,46 @@ void shell_close( shell *s, unsigned int vi);
 void shell_join( shell *s, unsigned int li0, unsigned int li1);
 void shell_remove( shell *s, unsigned int ti);
 
+/*!
+ * Small functions that can be inlined
+ */
+
+/*!
+ * A simple one-liner to find the other index.
+ *
+ * Add all the indices together, and subtract out the two known
+ * indices, leaving the unknown index.
+ */
+static inline unsigned int other_index( const unsigned int *t,
+            unsigned int vi0, unsigned int vi1){
+  return( t[0] + t[1] + t[2] - vi0 - vi1 );
+}
+
+/*!
+ * For a vertex on the edge, find the lines on the edge.
+ *
+ * Search through all the lines on a vertex that is on the edge. If we
+ * find one, compare the order to see if it is on the left or the
+ * right. This will not work if a single vertex has two edges.
+ */
+static inline void vertex_lines_on_edge(shell *s, unsigned int vi,
+                                        unsigned int *lil, 
+                                        unsigned int *lir){
+  unsigned int i, li;
+  vertex_data *vd = s->vd;
+  line_data *ld = s->ld;
+  line *l = s->l;
+
+  for( i=0; i<vd[vi].num_l; i++){
+    li = vd[vi].l[i];
+    if( ld[li].oe == yes && l[li].i[1] == vi ){
+      *lil = li;
+    }
+    if( ld[li].oe == yes && l[li].i[0] == vi ){
+      *lir = li;
+    }
+  }
+}
+
 #endif
 

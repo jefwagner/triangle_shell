@@ -15,17 +15,6 @@
 #include "energy.h"
 
 /*!
- * A simple one-liner to find the other index.
- *
- * Add all the indices together, and subtract out the two known
- * indices, leaving the unknown index.
- */
-static inline unsigned int other_index( const unsigned int *t,
-            unsigned int vi0, unsigned int vi1){
-  return( t[0] + t[1] + t[2] - vi0 - vi1 );
-}
-
-/*!
  * The energy of an unshared line.
  *
  * This file calculates the energy of an unshared line. It also
@@ -38,10 +27,9 @@ static double energy_unshared( const shell *s, const shell_params *sp,
   unsigned int vi0, vi1;
   double *x0, *x1;
   double b, db_dx0[3], db_dx1[3];
-  double k_s, th0;
+  double k_s;
 
   k_s = sqrt(sp->gamma);
-  th0 = sp->th0;
 
   vi0 = s->l[i].i[0];
   vi1 = s->l[i].i[1];

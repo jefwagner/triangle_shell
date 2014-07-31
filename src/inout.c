@@ -370,7 +370,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   double tmp_d;
   pdata pd;
   double *var_d[6], r_0;
-  int *var_i[1];
+  int *var_i[2];
   /* List out the names of the parameters in the parameter file. */
   const char *var_d_names[] = { 
     "gamma", 
@@ -381,7 +381,8 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
     "delta_b"
   };
   const char *var_i_names[] = { 
-    "seed"
+    "seed",
+    "movie"
   };
   /* List out pointers to the parameter in the program. */
   var_d[0] = &(sp->gamma);
@@ -391,6 +392,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   var_d[4] = &(sp->r_genome);
   var_d[5] = &(sp->delta_b);
   var_i[0] = (int *) &(sp->seed);
+  var_i[1] = (int *) &(sp->movie);
 
   /* First give the default parameters */
   sp->gamma = 2;
@@ -400,6 +402,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   sp->r_genome = 2.5;
   sp->delta_b = 0.8;
   sp->seed = n*1000;
+  sp->movie = 0;
 
   /* read the parameter file */
   if( pdata_read_file( &pd, file) == PDATA_FORMAT ){
@@ -412,16 +415,18 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
     sd[k] = pdata_get_var_d( &pd, var_d_names[k], &tmp_d);
     if( sd[k] == PDATA_SUCCESS){
       nd[k] = 1;
+    }else{
+      nd[k] = pdata_array_length( &pd, var_d_names[k]);
     }
-    nd[k] = pdata_array_length( &pd, var_d_names[k]);
   }
   for( k=0; k<NI; k++){
     ni[k] = 0;
     si[k] = pdata_get_var_i( &pd, var_i_names[k], &tmp_i);
     if( si[k] == PDATA_SUCCESS){
       ni[k] = 1;
+    }else{
+      ni[k] = pdata_array_length( &pd, var_i_names[k]);
     }
-    ni[k] = pdata_array_length( &pd, var_i_names[k]);
   }
   /* Check that n < n_tot */
   n_tot = 1;
@@ -478,9 +483,25 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
 
   /* Treat the data */
   /* Translate from r_0 to th0 */
-  sp->th0 = 2*asin(1./sqrt(12.*r_0*r_0-3.));
+  sp->th0 = 2.*asin(1./sqrt(12.*r_0*r_0-3.));
   /* Change sigma into radians */
   sp->sigma *= PI_180;
 
   return INOUT_SUCCESS;
+}
+
+void shell_params_write( shell_params *sp, FILE *file,
+                        const char *filename, unsigned int n){
+  double s = sin(0.5*sp->th0);
+  double r_0 = (1/(s*s)+3.)/12.;
+  fprintf( file, "# Parameter file for %s run number %u\n",
+          filename, n);
+  fprintf( file, "var gamma %1.10e\n", sp->gamma);
+  fprintf( file, "var r_0 %1.10e\n", r_0);
+  fprintf( file, "var sigma %1.10e\n", sp->sigma);
+  fprintf( file, "var r_membrane %1.10e\n", sp->r_membrane);
+  fprintf( file, "var r_genome %1.10e\n", sp->r_genome);
+  fprintf( file, "var delta_b %1.10e\n", sp->delta_b);
+  fprintf( file, "var seed %u\n", sp->seed);
+  fprintf( file, "var movie %u\n", sp->movie);
 }
