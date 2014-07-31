@@ -74,7 +74,7 @@ int main( int argc, const char **argv){
   while( i < 10){
     run_status = grow( sr);
     printf( "g: %u  ", run_status);
-    run_status = relax( sr);
+    run_status = relax_total( sr);
     printf( "r: %1.3f %u   ", sr->hmin, run_status);
     if( sr->sp->movie ){
       print_movie_frame( sr->s, i);
@@ -173,6 +173,7 @@ void shell_run_free( shell_run *sr){
 int shell_run_initialize( shell_run *sr, const char* filename, int n){
   int status;
   FILE *f;
+  srand( sr->sp->seed);
   f = fopen( filename, "r");
   if( f == NULL ){
     fprintf( stderr, "Could not open the parameter file %s.\n",

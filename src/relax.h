@@ -13,6 +13,6 @@
 
 #include "main.h"
 
-int relax( shell_run *sr );
+int relax_total( shell_run *sr );
 
 #endif

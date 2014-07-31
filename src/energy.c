@@ -136,3 +136,23 @@ double energy_shell( const shell *s, const shell_params *sp,
   }
   return h;
 }
+
+/*!
+ * Calculate the elastic energy for a set of lines on the shell.
+ */
+double energy_lines( const shell *s, const shell_params *sp,
+                    unsigned int num_l, const unsigned int *l,
+                    double *dx){
+  double h;
+  int i, num_v = s->num_v;
+
+  for( i=0; i<3*num_v; i++){
+    dx[i] = 0.;
+  }
+
+  h = 0.;
+  for( i=0; i<num_l; i++){
+    h += energy_line( s, sp, dx, l[i]);
+  }
+  return h;
+}

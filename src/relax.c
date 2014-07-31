@@ -25,7 +25,7 @@ double fn_min( int n, const double *x, double *dfdx, void *p ){
   return energy_shell( s, sp, dfdx);
 }
 
-int relax( shell_run *sr ){
+int relax_total( shell_run *sr ){
   double count = 0;
   nlcg_ws nlcg = sr->nlcg;
   int n = 3*(sr->s->num_v);

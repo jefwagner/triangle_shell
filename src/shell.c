@@ -501,7 +501,7 @@ static void merge_line( shell *s, unsigned int li0,
   }
   /* Possible move the vertices off the edge. */
   for( i=0; i<2; i++){
-    vi = l[lim].i[0];
+    vi = l[lim].i[i];
     vd[vi].oe = vertex_on_edge( s, vi);
   }
 

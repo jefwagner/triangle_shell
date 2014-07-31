@@ -107,7 +107,7 @@ static double get_line_angle( shell *s, unsigned int li){
   x5 = s->v[vi5].x;
   a_r = angle( x1, x2, x3, x4, x5);
 
-  return (1./(1./a_l+1./a_r));
+  return (2./(1./a_l+1./a_r));
 }
 
 /*!
@@ -126,7 +126,7 @@ unsigned int fill_move_array( shell *s, move *ml){
   k=0;
   for( i=0; i<s->num_v; i++){
     if( s->vd[i].oe == yes && 
-       s->vd[i].num_t >= 4){
+       s->vd[i].num_t >= 5){
       ml[k].type = vertex_move;
       ml[k].index = i;
       ml[k].angle = get_vertex_angle( s, i);
@@ -156,7 +156,7 @@ unsigned int fill_move_array( shell *s, move *ml){
 unsigned int choose_move( unsigned int num_k, double sigma, move *ml){
   double min_a, p_max, p_cum, r, lp;
   int k;
-  min_a = TWOPI;
+  min_a = 2.*TWOPI;
   for( k=0; k<num_k; k++){
     min_a = min( min_a, ml[k].angle);
   }

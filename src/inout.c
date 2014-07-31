@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <math.h>
 
 #include "main.h"
@@ -361,16 +362,17 @@ int shell_read( shell *s, FILE *f){
  * listed is the least significant to the most significant.
  */
  #define ND 6
- #define NI 1
+ #define NI 2
 int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   int k; 
   int nd[ND], ni[NI], sd[ND], si[NI]; 
   int id[ND], ii[ND], tmp_n;
   int tmp_i, n_tot;
   double tmp_d;
-  pdata pd;
-  double *var_d[6], r_0;
-  int *var_i[2];
+  double *var_d[ND], r_0;
+  int *var_i[NI];
+  /* Initialize parameter data structure with all zeros */
+  pdata pd = { {{0, "\0", "\0"}}, 0};
   /* List out the names of the parameters in the parameter file. */
   const char *var_d_names[] = { 
     "gamma", 
@@ -401,7 +403,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   sp->r_membrane = 10;
   sp->r_genome = 2.5;
   sp->delta_b = 0.8;
-  sp->seed = n*1000;
+  sp->seed = (unsigned int) time(NULL);
   sp->movie = 0;
 
   /* read the parameter file */
