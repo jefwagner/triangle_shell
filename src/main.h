@@ -35,6 +35,17 @@ typedef struct{
   double angle;
 } move;
 
+/*!
+ * A data structure to hold the list of lines and vertices for the
+ * relax partial function.
+ */
+typedef struct{
+  unsigned int num_vl;
+  unsigned int *vl;
+  unsigned int num_ll;
+  unsigned int *ll;
+} relax_partial_ws;
+
 typedef struct {
   double gamma;
   double th0;
@@ -44,6 +55,8 @@ typedef struct {
   double delta_b;
   unsigned int seed;
   unsigned int movie;
+  unsigned int rp_depth;
+  unsigned int max_tri;
 } shell_params;
 
 typedef struct {
@@ -52,6 +65,7 @@ typedef struct {
   nlcg_ws nlcg;
   double hmin;
   move *ml;
+  relax_partial_ws *rp;
 } shell_run;
 
 #endif

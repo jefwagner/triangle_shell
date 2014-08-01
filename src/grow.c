@@ -276,6 +276,51 @@ static unsigned int close_index( shell *s, unsigned int vi){
 }
 
 /*!
+ * merge lines when they total distance between the points is less
+ * than delta_b.
+ */
+static int merge_move( shell *s, double delta_b){
+  int i, j;
+  int vi0, vi1, vi2, vi3;
+  double b;
+
+  for( i=0; i<s->num_l-1; i++){
+    if( s->ld[i].oe == yes ){
+      vi0 = s->l[i].i[0];
+      vi1 = s->l[i].i[1];
+      for( j=i+1; j<s->num_l; j++){
+        if( s->ld[j].oe == yes ){
+          vi2 = s->l[j].i[0];
+          vi3 = s->l[j].i[1];
+          if( vi0 == vi3 && vi1 == vi2 ){
+            shell_merge_line( s, i, j);
+            vi0 = min(vi0, vi1);
+            vi0 = min(vi0, vi2);
+            vi0 = min(vi0, vi3);
+            return vi0;            
+          }
+          if( vi0 != vi3 && vi1 != vi2 &&
+              s->vd[vi0].num_t + s->vd[vi3].num_t <= 6 &&
+              s->vd[vi1].num_t + s->vd[vi2].num_t <= 6 ){
+            b = dist( s->v[vi0].x, s->v[vi3].x)
+              + dist( s->v[vi1].x, s->v[vi2].x);
+            if( b < delta_b ){
+              shell_join( s, i, j);
+              vi0 = min(vi0, vi1);
+              vi0 = min(vi0, vi2);
+              vi0 = min(vi0, vi3);
+              return vi0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return -1;
+}
+
+/*!
  * Perform 1 grow move.
  *
  * This function performs a single grow move (attach, insert, close)
@@ -292,6 +337,12 @@ int grow( shell_run *sr ){
   move *ml = sr->ml;
   double sigma = sr->sp->sigma;
   double a_cutoff = PI_6;
+  double delta_b = sr->sp->delta_b;
+
+  status = merge_move( s, delta_b);
+  if( status != -1){
+    return status;
+  }
 
   num_k = fill_move_array( s, ml);
   while( num_k > 0 ){

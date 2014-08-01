@@ -156,3 +156,67 @@ double energy_lines( const shell *s, const shell_params *sp,
   }
   return h;
 }
+
+/*!
+ * Calculate the energy between the shell and the genome.
+ */
+double energy_gen( const shell *s, const shell_params *sp,
+                          double *dx){
+  int i, j;
+  double h, b, db_dgen[3], db_dv[3];
+  double r_gen = sp->r_genome;
+
+  dx[3*0+0] = 0.;
+  dx[3*0+1] = 0.;
+  dx[3*0+2] = 0.;
+
+  h = 0.;
+  for( i=0; i<3; i++){
+    b = dist_d( s->p_gen->x, s->v[i].x, db_dgen, db_dv);
+    h += 0.5*(b-r_gen)*(b-r_gen);
+    for( j=0; j<3; j++){
+      dx[3*0+j] += (b-r_gen)*db_dgen[j];
+      dx[3*(i+2)+j] += (b-r_gen)*db_dv[j];
+    }
+  }
+  for( i=3; i<s->num_v; i++){
+    b = dist_d( s->p_gen->x, s->v[i].x, db_dgen, db_dv);
+    if( b < r_gen ){
+      h += 0.5*(b-r_gen)*(b-r_gen);
+      for( j=0; j<3; j++){
+        dx[3*0+j] += (b-r_gen)*db_dgen[j];
+        dx[3*(i+2)+j] += (b-r_gen)*db_dv[j];
+      }
+    }
+  }
+
+  return h;
+}
+
+/*!
+ * Calculate the energy between the shell and the membrane.
+ */
+double energy_mem( const shell *s, const shell_params *sp,
+                          double *dx){
+  int i, j;
+  double h, b, db_dmem[3], db_dv[3];
+  double r_mem = sp->r_membrane;
+
+  dx[3*1+0] = 0.;
+  dx[3*1+1] = 0.;
+  dx[3*1+2] = 0.;
+
+  h = 0.;
+  for( i=0; i<s->num_v; i++){
+    b = dist_d( s->p_mem->x, s->v[i].x, db_dmem, db_dv);
+    if( b > r_mem ){
+      h += 0.5*(b-r_mem)*(b-r_mem);
+      for( j=0; j<3; j++){
+        dx[3*1+j] += (b-r_mem)*db_dmem[j];
+        dx[3*(i+2)+j] += (b-r_mem)*db_dv[j];
+      }
+    }
+  }
+
+  return h;
+}

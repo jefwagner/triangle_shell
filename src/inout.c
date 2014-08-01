@@ -109,6 +109,15 @@ void shell_write( shell *s, FILE *f){
   for( i=0; i<num_t; i++){
     fprintf( f, "%u %u %u\n", td[i].l[0], td[i].l[1], td[i].l[2]);
   }
+
+  fprintf( f, "Position of Genome\n");
+  fprintf( f, "x y z\n");
+  fprintf( f, "%1.6e %1.6e %1.6e\n", s->p_gen->x[0], 
+          s->p_gen->x[1], s->p_gen->x[2]);
+  fprintf( f, "Position of Membrane\n");
+  fprintf( f, "x y z\n");
+  fprintf( f, "%1.6e %1.6e %1.6e\n", s->p_mem->x[0],
+          s->p_mem->x[1], s->p_mem->x[2]);
 }
 
 int shell_read( shell *s, FILE *f){
@@ -362,7 +371,7 @@ int shell_read( shell *s, FILE *f){
  * listed is the least significant to the most significant.
  */
  #define ND 6
- #define NI 2
+ #define NI 4
 int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   int k; 
   int nd[ND], ni[NI], sd[ND], si[NI]; 
@@ -384,7 +393,9 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   };
   const char *var_i_names[] = { 
     "seed",
-    "movie"
+    "movie",
+    "rp_depth",
+    "max_tri"
   };
   /* List out pointers to the parameter in the program. */
   var_d[0] = &(sp->gamma);
@@ -395,6 +406,8 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   var_d[5] = &(sp->delta_b);
   var_i[0] = (int *) &(sp->seed);
   var_i[1] = (int *) &(sp->movie);
+  var_i[2] = (int *) &(sp->rp_depth);
+  var_i[3] = (int *) &(sp->max_tri);
 
   /* First give the default parameters */
   sp->gamma = 2;
@@ -405,6 +418,8 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   sp->delta_b = 0.8;
   sp->seed = (unsigned int) time(NULL);
   sp->movie = 0;
+  sp->rp_depth = 4;
+  sp->max_tri = 1500;
 
   /* read the parameter file */
   if( pdata_read_file( &pd, file) == PDATA_FORMAT ){

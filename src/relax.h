@@ -15,4 +15,8 @@
 
 int relax_total( shell_run *sr );
 
+relax_partial_ws* relax_partial_ws_malloc( unsigned int depth);
+void relax_partial_ws_free( relax_partial_ws *rp);
+int relax_partial( shell_run *sr , unsigned int vi);
+
 #endif

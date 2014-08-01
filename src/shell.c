@@ -12,6 +12,7 @@
  * - `shell_initialize`, initialize the shell with 1 triangle,
  * - `shell_attach`, add a triangle to the shell,
  * - `shell_insert`, insert a triangle into the shell,
+ * - `shell_merge_line`, merge two lines,
  * - `shell_close`, close two neighboring edges in a shell,
  * - `shell_join`, join two non-neighboring edges in a shell,
  * - `shell_remove`, remove a triangle from the shell. 
@@ -26,7 +27,6 @@
  * - `merge_vertex`, merge two vertices,
  * - `triangle_on_edge`, find if a triangle is on the edge,
  * - `vertex_on_edge`, find if a vertex is on the edge,
- * - `merge_line`, merge two lines,
  * - `align_line`, possibly reorder the points in a line.
  */
 
@@ -47,28 +47,30 @@ shell* shell_malloc( unsigned int max_t ){
   if( s== NULL ){ return NULL; }
   max_v = max_t + 2;
   max_l = 2*max_t + 1;
-  s->v = (point *) malloc( max_v*sizeof(point));
-  if( s->v == NULL ){ 
+  s->p_gen = (point *) malloc( (max_v+2)*sizeof(point));
+  if( s->p_gen == NULL ){ 
     free( s); 
     return NULL; 
   }
+  s->p_mem = &(s->p_gen[1]);
+  s->v = &(s->p_gen[2]);
   s->vd = (vertex_data *) malloc( max_v*sizeof(vertex_data));
   if( s->vd == NULL ){ 
-    free( s->v); 
+    free( s->p_gen); 
     free( s);
     return NULL; 
   }
   s->l = (line *) malloc( max_l*sizeof(line));
   if( s->l == NULL ){ 
     free( s->vd);
-    free( s->v); 
+    free( s->p_gen); 
     free( s);
     return NULL; }
   s->ld = (line_data *) malloc( max_l*sizeof(line_data));
   if( s->ld == NULL ){ 
     free( s->l);
     free( s->vd);
-    free( s->v); 
+    free( s->p_gen); 
     free( s);
     return NULL; 
   }
@@ -77,7 +79,7 @@ shell* shell_malloc( unsigned int max_t ){
     free( s->ld);
     free( s->l);
     free( s->vd);
-    free( s->v); 
+    free( s->p_gen); 
     free( s);
     return NULL; 
   }
@@ -87,7 +89,7 @@ shell* shell_malloc( unsigned int max_t ){
     free( s->ld);
     free( s->l);
     free( s->vd);
-    free( s->v); 
+    free( s->p_gen); 
     free( s);
     return NULL; 
   }
@@ -100,7 +102,7 @@ shell* shell_malloc( unsigned int max_t ){
  */
 void shell_copy( shell *dest, const shell *source){
   dest->num_v = source->num_v;
-  memcpy( dest->v, source->v, source->num_v*sizeof(point));
+  memcpy( dest->p_gen, source->p_gen, (source->num_v+2)*sizeof(point));
   memcpy( dest->vd, source->vd, source->num_v*sizeof(vertex_data));
   dest->num_l = source->num_l;
   memcpy( dest->l, source->l, source->num_l*sizeof(line));
@@ -119,7 +121,7 @@ void shell_free( shell *s){
   free( s->ld);
   free( s->l);
   free( s->vd);
-  free( s->v);
+  free( s->p_gen);
   free( s);
 }
 
@@ -449,7 +451,7 @@ static on_edge vertex_on_edge( const shell *s, unsigned int vi){
  * - possibly moves vertices off the edge,
  * - removes the old line.
  */
-static void merge_line( shell *s, unsigned int li0,
+void shell_merge_line( shell *s, unsigned int li0,
                        unsigned int li1){
   unsigned int i, j, lim, lip, ti, vi, size, decr;
   vertex_data *vd = s->vd;
@@ -607,7 +609,7 @@ void shell_close( shell *s, unsigned int vi){
   vi0 = l[lil].i[0];
   vi1 = l[lir].i[1];
   merge_vertex( s, vi0, vi1);
-  merge_line( s, lil, lir);
+  shell_merge_line( s, lil, lir);
 }
 
 /*!
@@ -624,7 +626,7 @@ void shell_join( shell *s, unsigned int li0, unsigned int li1){
 
   merge_vertex( s, vi00, vi11);
   merge_vertex( s, vi01, vi10);
-  merge_line( s, li0, li1);
+  shell_merge_line( s, li0, li1);
 }
 
 /*!

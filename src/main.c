@@ -20,15 +20,17 @@
 #include "cg.h"
 #include "relax.h"
 #include "grow.h"
-
-#define MAX_TRI 100
+#include "math_const.h"
 
 void usage( const char* argv0);
 int get_cl_args( int argc, const char **argv,
                    char *parameter_filename, int *n);
-shell_run* shell_run_malloc( unsigned int max_tri);
+shell_run* shell_run_malloc( unsigned int max_tri, 
+                            unsigned int depth);
 void shell_run_free( shell_run *sr);
-int shell_run_initialize( shell_run *sr, const char* filename, int n);
+int shell_params_initialize( shell_params *sp, const char* filename, 
+                            int n);
+void shell_run_initialize( shell_run *sr, shell_params *sp);
 int create_output_directories( shell_run *sr, const char* filename);
 int print_params( shell_params *sp, unsigned int n, 
                  const char* filename);
@@ -37,9 +39,10 @@ void print_movie_frame( shell *s, unsigned int i);
 
 
 int main( int argc, const char **argv){
-  int n, status, run_status, i;
+  int n, status, grow_status, relax_status, i, max_eval_count;
   char parameter_filename[80];
   shell_run *sr;
+  shell_params sp;
 
   status = get_cl_args( argc, argv, parameter_filename, &n);
   if( status != 0){
@@ -47,17 +50,18 @@ int main( int argc, const char **argv){
     return status;
   }
 
-  sr = shell_run_malloc( MAX_TRI);
+  status = shell_params_initialize( &sp, parameter_filename, n);
+  if( status != 0){
+    usage( argv[0]);
+    return status;
+  }
+  sr = shell_run_malloc( sp.max_tri, sp.rp_depth);
   if( sr == NULL ){
     fprintf( stderr, "Could not allocated needed memory.\n");
     usage( argv[0]);
     return 1;
   }
-  status = shell_run_initialize( sr, parameter_filename, n);
-  if( status != 0){
-    usage( argv[0]);
-    return status;
-  }
+  shell_run_initialize( sr, &sp);
   status = create_output_directories( sr, parameter_filename);
   if( status != 0){
     usage( argv[0]);
@@ -66,21 +70,36 @@ int main( int argc, const char **argv){
   status = print_params( sr->sp, n, parameter_filename);
 
   i=0;
-  run_status = relax( sr);
   if( sr->sp->movie ){
     print_movie_frame( sr->s, i);
   }
   i++;
-  while( i < 10){
-    run_status = grow( sr);
-    printf( "g: %u  ", run_status);
-    run_status = relax_total( sr);
-    printf( "r: %1.3f %u   ", sr->hmin, run_status);
+  grow_status = 0;
+  max_eval_count = 0;
+  grow_status = grow( sr);
+  while( grow_status != -1 && 
+        sr->s->num_t < sr->sp->max_tri &&
+        max_eval_count < 5 ){
+    if( i%10 == 0 ){
+      relax_status = relax_total( sr);
+    }else{
+      relax_status = relax_partial( sr, grow_status);
+    }
+    if( relax_status >= 50000){
+      max_eval_count++;
+    }else{
+      max_eval_count = 0;
+    }
     if( sr->sp->movie ){
       print_movie_frame( sr->s, i);
     }
+    printf( ".");
+    fflush( stdout);
+    if( i%30 == 0 ){
+      printf( "\n");
+    }
     i++;
-    printf( "t: %u\n", sr->s->num_t);
+    grow_status = grow( sr);
   }
 
   status += print_shell( sr->s, n, parameter_filename);
@@ -121,7 +140,7 @@ int get_cl_args( int argc, const char **argv,
   return status;
 }
 
-shell_run* shell_run_malloc( unsigned int max_tri){
+shell_run* shell_run_malloc( unsigned int max_tri, unsigned int depth){
   shell_run *sr;
   unsigned int max_vert, max_moves;
 
@@ -132,21 +151,14 @@ shell_run* shell_run_malloc( unsigned int max_tri){
   if( sr == NULL ){
     return NULL;
   }
-  sr->sp = (shell_params *) malloc( sizeof(shell_params));
-  if( sr->sp == NULL ){
-    free( sr);
-    return NULL;
-  }
   sr->s = shell_malloc( max_tri);
   if( sr->s == NULL ){
-    free( sr->sp);
     free( sr);
     return NULL;
   }
-  sr->nlcg = nlcg_malloc(max_vert);
+  sr->nlcg = nlcg_malloc(3*(max_vert+2));
   if( sr->nlcg == NULL ){
     shell_free( sr->s);
-    free( sr->sp);
     free( sr);
     return NULL;
   }
@@ -154,33 +166,39 @@ shell_run* shell_run_malloc( unsigned int max_tri){
   if( sr->ml == NULL){
     nlcg_free( sr->nlcg);
     shell_free( sr->s);
-    free( sr->sp);
     free( sr);
     return NULL;
+  }
+  sr->rp = relax_partial_ws_malloc( depth);
+  if( sr->rp == NULL ){
+    free( sr->ml);
+    nlcg_free( sr->nlcg);
+    shell_free( sr->s);
+    free( sr);
+    return NULL;    
   }
 
   return sr;
 }
 
 void shell_run_free( shell_run *sr){
+  relax_partial_ws_free( sr->rp);
   free( sr->ml);
   nlcg_free( sr->nlcg);
   shell_free( sr->s);
-  free( sr->sp);
   free( sr);
 }
 
-int shell_run_initialize( shell_run *sr, const char* filename, int n){
+int shell_params_initialize( shell_params *sp, const char* filename, int n){
   int status;
   FILE *f;
-  srand( sr->sp->seed);
   f = fopen( filename, "r");
   if( f == NULL ){
     fprintf( stderr, "Could not open the parameter file %s.\n",
             filename);
     return 1;
   }
-  status = read_param_file( sr->sp, f, n);
+  status = read_param_file( sp, f, n);
   if( status == INOUT_OUT_OF_BOUNDS ){
     fprintf( stderr, "Simulation number out of bounds.\n");
     return 1;
@@ -191,9 +209,22 @@ int shell_run_initialize( shell_run *sr, const char* filename, int n){
     return 1;
   }
   fclose( f);
-  shell_initialize( sr->s);
-  nlcg_set_tol( 0., 0., 1.e-4, 50000, sr->nlcg);
   return 0;
+}
+
+void shell_run_initialize( shell_run *sr, shell_params *sp){
+  double z, r_gen = sp->r_genome;
+  z = sqrt(r_gen*r_gen-3./9.);
+  sr->sp = sp;
+  srand( sp->seed);
+  shell_initialize( sr->s);
+  sr->s->p_gen->x[0] = 0.5; 
+  sr->s->p_gen->x[1] = ROOT3/6.;
+  sr->s->p_gen->x[2] = z;
+  sr->s->p_mem->x[0] = 0.; 
+  sr->s->p_mem->x[1] = 0.;
+  sr->s->p_mem->x[2] = 0.;
+  nlcg_set_tol( 0., 0., 1.e-4, 50000, sr->nlcg);
 }
 
 /*!
