@@ -27,8 +27,12 @@ double fn_min_total( int n, const double *x, double *dfdx, void *p ){
   shell_params *sp = ((fn_min_total_params *) p)->sp;
   (*count)++;
   h = energy_shell( s, sp, &(dfdx[3*2]));
-  h += energy_gen( s, sp, dfdx);
-  h += energy_mem( s, sp, dfdx);
+  if( sp->r_genome != 0.0 ){
+    h += energy_gen( s, sp, dfdx);
+  }
+  if( sp->r_membrane != 0.0 ){
+    h += energy_mem( s, sp, dfdx);
+  }
   return h;
 }
 
@@ -58,16 +62,22 @@ double fn_min_partial( int n, const double *x, double *dfdx, void *p){
   shell_params *sp = ((fn_min_partial_params *) p)->sp;
   unsigned int num_vl = ((fn_min_partial_params *) p)->rp->num_vl;
   unsigned int *vl = ((fn_min_partial_params *) p)->rp->vl;
+  unsigned int num_vf = ((fn_min_partial_params *) p)->rp->num_vf;
+  unsigned int *vf = ((fn_min_partial_params *) p)->rp->vf;
   unsigned int num_ll = ((fn_min_partial_params *) p)->rp->num_ll;
   unsigned int *ll = ((fn_min_partial_params *) p)->rp->ll;
   (*count)++;
   h = energy_lines( s, sp, num_ll, ll, &(dfdx[3*2]));
-  h += energy_gen( s, sp, dfdx);
-  h += energy_mem( s, sp, dfdx);
-  for( i=0; i<num_vl; i++){
-    dfdx[3*(vl[i]+2)+0] = 0.;
-    dfdx[3*(vl[i]+2)+1] = 0.;
-    dfdx[3*(vl[i]+2)+2] = 0.;
+  if( sp->r_genome != 0.0 ){
+    h += energy_gen_partial( s, sp, dfdx, num_vl, vl);
+  }
+  if( sp->r_membrane != 0.0 ){
+    h += energy_mem_partial( s, sp, dfdx, num_vl, vl);
+  }
+  for( i=0; i<num_vf; i++){
+    dfdx[3*(vf[i]+2)+0] = 0.;
+    dfdx[3*(vf[i]+2)+1] = 0.;
+    dfdx[3*(vf[i]+2)+2] = 0.;
   }
   return h;
 }
@@ -88,46 +98,49 @@ static void fill_line_and_vertex_list( shell *s, unsigned int vi,
                                       unsigned int depth,
                                       relax_partial_ws *rp){
   unsigned int i, j, k;
-  unsigned int nl_old=0, nv_old=0, nv_moving, nv_fixed;
-  unsigned int *nv = &(rp->num_vl);
-  unsigned int *v = rp->vl;
+  unsigned int nl_old=0, nv_old=0, nv_moving;
+  unsigned int *nvl = &(rp->num_vl);
+  unsigned int *vl = rp->vl;
+  unsigned int *nvf = &(rp->num_vf);
+  unsigned int *vf = rp->vf;
   unsigned int *nl = &(rp->num_ll);
   unsigned int *l = rp->ll;
 
-  v[0] = vi;
-  *nv = 1;
+  vl[0] = vi;
+  *nvl = 1;
+  *nvf = 0;
   *nl = 0;
 
   for( k=0; k<depth; k++){
     nl_old = *nl;
-    for( i=nv_old; i<*nv; i++){
-      for( j=0; j<(s->vd[v[i]].num_l); j++){
-        add_unique( nl, l, s->vd[v[i]].l[j]);
+    for( i=nv_old; i<*nvl; i++){
+      for( j=0; j<(s->vd[vl[i]].num_l); j++){
+        add_unique( nl, l, s->vd[vl[i]].l[j]);
       }
     }
-    nv_old = *nv;
+    nv_old = *nvl;
     for( i=nl_old; i<*nl; i++){
-      add_unique( nv, v, s->l[l[i]].i[0]);
-      add_unique( nv, v, s->l[l[i]].i[1]);
+      add_unique( nvl, vl, s->l[l[i]].i[0]);
+      add_unique( nvl, vl, s->l[l[i]].i[1]);
     }
   }
-  nv_moving = *nv;
+  nv_moving = *nvl;
   for( k=0; k<2; k++){
     nl_old = *nl;
-    for( i=nv_old; i<*nv; i++){
-      for( j=0; j<(s->vd[v[i]].num_l); j++){
-        add_unique( nl, l, s->vd[v[i]].l[j]);
+    for( i=nv_old; i<*nvl; i++){
+      for( j=0; j<(s->vd[vl[i]].num_l); j++){
+        add_unique( nl, l, s->vd[vl[i]].l[j]);
       }
     }
-    nv_old = *nv;
+    nv_old = *nvl;
     for( i=nl_old; i<*nl; i++){
-      add_unique( nv, v, s->l[l[i]].i[0]);
-      add_unique( nv, v, s->l[l[i]].i[1]);
+      add_unique( nvl, vl, s->l[l[i]].i[0]);
+      add_unique( nvl, vl, s->l[l[i]].i[1]);
     }
   }
-  nv_fixed = *nv - nv_moving;
-  memmove( &(v[0]), &(v[nv_moving]), nv_fixed*sizeof(unsigned int));
-  *nv = nv_fixed;
+  *nvf = *nvl - nv_moving;
+  memcpy( vf, &(vl[nv_moving]), (*nvf)*sizeof(unsigned int));
+  *nvl = nv_moving;
 }
 
 relax_partial_ws* relax_partial_ws_malloc( unsigned int depth){
@@ -145,8 +158,15 @@ relax_partial_ws* relax_partial_ws_malloc( unsigned int depth){
     free( rp);
     return NULL;
   }
+  rp->vf = (unsigned int *) malloc( size_vl*sizeof(unsigned int));
+  if( rp->vf == NULL ){
+    free( rp->vl);
+    free( rp);
+    return NULL;
+  }
   rp->ll = (unsigned int *) malloc( size_ll*sizeof(unsigned int));
   if( rp->ll == NULL ){
+    free( rp->vf);
     free( rp->vl);
     free( rp);
     return NULL;
@@ -156,6 +176,7 @@ relax_partial_ws* relax_partial_ws_malloc( unsigned int depth){
 
 void relax_partial_ws_free( relax_partial_ws *rp){
   free( rp->ll);
+  free( rp->vf);
   free( rp->vl);
   free( rp);
 }

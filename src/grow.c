@@ -126,7 +126,7 @@ unsigned int fill_move_array( shell *s, move *ml){
   k=0;
   for( i=0; i<s->num_v; i++){
     if( s->vd[i].oe == yes && 
-       s->vd[i].num_t >= 5){
+       s->vd[i].num_t >= 4){
       ml[k].type = vertex_move;
       ml[k].index = i;
       ml[k].angle = get_vertex_angle( s, i);
@@ -250,7 +250,7 @@ static int test_attach( shell *s, point p){
   for( i=0; i<s->num_t; i++){
     center = tri_center( s, i);
     b = dist( center.x, p.x);
-    if( b < ROOT3/4.){
+    if( b < ROOT3/3.+0.05){
       status++;
     }
   }
@@ -329,7 +329,7 @@ static int merge_move( shell *s, double delta_b){
  * is negative.
  */
 int grow( shell_run *sr ){
-  unsigned int k, num_k;
+  unsigned int k, num_k, tpv;
   point pnew;
   int status = -1;
   shell *s = sr->s;
@@ -348,17 +348,29 @@ int grow( shell_run *sr ){
   while( num_k > 0 ){
     k = choose_move( num_k, sigma, ml);
     if( ml[k].type == vertex_move){
-      if( ml[k].angle < a_cutoff ){
+      tpv = s->vd[ml[k].index].num_t;
+      /* Close the wedge */
+      if( ( tpv == 5 || tpv == 6 ) &&
+         (ml[k].angle < a_cutoff || ml[k].angle >= 5.*PI_3) ){
         if( test_close( s, ml[k].index)){
           status = close_index( s, ml[k].index);
           shell_close( s, ml[k].index);
           break;
         }
       }
-      if( test_insert( s, ml[k].index)){
-        status = ml[k].index;
-        shell_insert( s, ml[k].index);
-        break;
+      if( tpv == 4 && ml[k].angle < PI_3 ){
+        if( test_insert( s, ml[k].index)){
+          status = ml[k].index;
+          shell_insert( s, ml[k].index);
+          break;
+        }
+      }
+      if( tpv == 5 ){
+        if( test_insert( s, ml[k].index)){
+          status = ml[k].index;
+          shell_insert( s, ml[k].index);
+          break;
+        }
       }
     }else{
       pnew = new_point( s, sp, ml[k].index);

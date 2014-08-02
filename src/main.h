@@ -42,6 +42,8 @@ typedef struct{
 typedef struct{
   unsigned int num_vl;
   unsigned int *vl;
+  unsigned int num_vf;
+  unsigned int *vf;
   unsigned int num_ll;
   unsigned int *ll;
 } relax_partial_ws;

@@ -256,6 +256,16 @@ int print_params( shell_params *sp, unsigned int n,
   }
   shell_params_write( sp, f, filename, n);
   fclose( f);
+  if( sp->movie ){
+    sprintf( prm_file, "movie/movie.prm");
+    f = fopen( prm_file, "w");
+    if( f == NULL ){
+      fprintf( stderr, "Could not open outputfile %s\n", prm_file);
+      return 1;
+    }
+    shell_params_write( sp, f, filename, n);
+    fclose(f);
+  }
   return 0;
 }
 

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     35718,        723]
-NotebookOptionsPosition[     35024,        695]
-NotebookOutlinePosition[     35399,        712]
-CellTagsIndexPosition[     35356,        709]
+NotebookDataLength[    125898,       3062]
+NotebookOptionsPosition[    117662,       2860]
+NotebookOutlinePosition[    118037,       2877]
+CellTagsIndexPosition[    117994,       2874]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -47,12 +47,14 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{"readShell", "[", "file_", "]"}], ":=", 
-  RowBox[{"Module", "[", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"{", 
      RowBox[{
      "f", ",", "n", ",", "nn", ",", "v", ",", "voe", ",", "vl", ",", "vt", 
-      ",", "l", ",", "loe", ",", "lt", ",", "t", ",", "toe", ",", "tl"}], 
+      ",", "l", ",", "loe", ",", "lt", ",", "t", ",", "toe", ",", "tl", ",", 
+      "\[IndentingNewLine]", "rGenome", ",", "vGenome", ",", "rMembrane", ",",
+       "vMembrane", ",", "gamma", ",", "r0", ",", "sigma", ",", "deltaB"}], 
      "}"}], ",", "\[IndentingNewLine]", 
     RowBox[{
      RowBox[{"f", "=", 
@@ -203,6 +205,24 @@ Cell[BoxData[
            RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}], 
         ",", 
         RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"vGenome", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", 
+        RowBox[{"{", 
+         RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"vMembrane", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", 
+        RowBox[{"{", 
+         RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
      RowBox[{"Close", "[", "f", "]"}], ";", "\[IndentingNewLine]", 
      RowBox[{"voe", "=", 
       RowBox[{"Map", "[", 
@@ -234,6 +254,45 @@ Cell[BoxData[
        "]"}]}], ";", "\[IndentingNewLine]", 
      RowBox[{"tl", "=", 
       RowBox[{"tl", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"f", "=", 
+      RowBox[{"OpenRead", "[", 
+       RowBox[{"StringReplace", "[", 
+        RowBox[{"file", ",", 
+         RowBox[{"\"\<.shell\>\"", "\[Rule]", "\"\<.prm\>\""}]}], "]"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"gamma", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"r0", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"sigma", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"rMembrane", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"rGenome", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"deltaB", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Close", "[", "f", "]"}], ";", "\[IndentingNewLine]", 
      RowBox[{"{", 
       RowBox[{"v", ",", 
        RowBox[{"{", 
@@ -241,38 +300,44 @@ Cell[BoxData[
        RowBox[{"{", 
         RowBox[{"loe", ",", "lt"}], "}"}], ",", "t", ",", 
        RowBox[{"{", 
-        RowBox[{"toe", ",", "tl"}], "}"}]}], "}"}]}]}], "]"}]}]], "Input",
+        RowBox[{"toe", ",", "tl"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"vGenome", ",", "rGenome"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"vMembrane", ",", "rMembrane"}], "}"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"gamma", ",", "r0", ",", "sigma", ",", "deltaB"}], "}"}]}], 
+      "}"}]}]}], "]"}]}]], "Input",
  CellChangeTimes->{{3.615828887398155*^9, 3.615829150196192*^9}, {
   3.615829184093876*^9, 3.615829362045548*^9}, {3.615829395702517*^9, 
   3.615829513601183*^9}, {3.6158295450954027`*^9, 3.615829819762186*^9}, {
   3.615829996730856*^9, 3.615830007115313*^9}, {3.615830178099183*^9, 
-  3.6158302920578423`*^9}, {3.615830586880886*^9, 3.615830617129545*^9}}],
+  3.6158302920578423`*^9}, {3.615830586880886*^9, 3.615830617129545*^9}, {
+  3.6159009651204443`*^9, 3.615901064804862*^9}, {3.615901144385529*^9, 
+  3.615901446145505*^9}, {3.615901480098325*^9, 3.615901481735067*^9}, {
+  3.615901535581049*^9, 3.615901549636413*^9}}],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"plotShell", "[", "shell_", "]"}], ":=", 
-  RowBox[{"Module", "[", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"{", 
      RowBox[{
-     "v", ",", "vd", ",", "l", ",", "ld", ",", "t", ",", "td", ",", "le"}], 
-     "}"}], ",", "\[IndentingNewLine]", 
+     "v", ",", "vd", ",", "l", ",", "ld", ",", "t", ",", "td", ",", "le", ",",
+       "spheres", ",", "params", ",", "stuff"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
     RowBox[{
      RowBox[{
       RowBox[{"{", 
-       RowBox[{"v", ",", "vd", ",", "l", ",", "ld", ",", "t", ",", "td"}], 
-       "}"}], "=", "shell"}], ";", "\[IndentingNewLine]", 
-     RowBox[{"le", "=", 
-      RowBox[{"l", "[", 
-       RowBox[{"[", 
-        RowBox[{"Flatten", "[", 
-         RowBox[{"Position", "[", 
-          RowBox[{
-           RowBox[{"ld", "[", 
-            RowBox[{"[", "1", "]"}], "]"}], ",", "True"}], "]"}], "]"}], 
-        "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-     RowBox[{"Graphics3D", "[", "\[IndentingNewLine]", 
-      RowBox[{
+       RowBox[{
+       "v", ",", "vd", ",", "l", ",", "ld", ",", "t", ",", "td", ",", 
+        "spheres", ",", "params"}], "}"}], "=", "shell"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"stuff", "=", 
+      RowBox[{"{", 
        RowBox[{"GraphicsComplex", "[", 
         RowBox[{"v", ",", 
          RowBox[{"{", "\[IndentingNewLine]", 
@@ -290,407 +355,2507 @@ Cell[BoxData[
             RowBox[{"Thick", ",", "Red", ",", 
              RowBox[{"Map", "[", 
               RowBox[{"Line", ",", "le"}], "]"}]}], "}"}]}], 
-          "\[IndentingNewLine]", "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
-       RowBox[{"Lighting", "\[Rule]", "\"\<Neutral\>\""}]}], 
-      "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
-   "]"}]}]], "Input"],
+          "\[IndentingNewLine]", "}"}]}], "]"}], "}"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"spheres", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "[", 
+         RowBox[{"[", "2", "]"}], "]"}], ">", "0.91"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"stuff", "=", 
+        RowBox[{"Append", "[", 
+         RowBox[{"stuff", ",", 
+          RowBox[{"{", 
+           RowBox[{"Apply", "[", 
+            RowBox[{"Sphere", ",", 
+             RowBox[{"spheres", "[", 
+              RowBox[{"[", "1", "]"}], "]"}]}], "]"}], "}"}]}], "]"}]}]}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"spheres", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "<", "15"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"stuff", "=", 
+        RowBox[{"Append", "[", 
+         RowBox[{"stuff", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Opacity", "[", "0.5", "]"}], ",", 
+            RowBox[{"Apply", "[", 
+             RowBox[{"Sphere", ",", 
+              RowBox[{"spheres", "[", 
+               RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}], "}"}]}], "]"}]}]}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"le", "=", 
+      RowBox[{"l", "[", 
+       RowBox[{"[", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Position", "[", 
+          RowBox[{
+           RowBox[{"ld", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", "True"}], "]"}], "]"}], 
+        "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"stuff", ",", 
+       RowBox[{"Lighting", "\[Rule]", "\"\<Neutral\>\""}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6159014632338953`*^9, 3.61590151517238*^9}, {
+  3.615901560718631*^9, 3.615901610889497*^9}, {3.615901750944277*^9, 
+  3.6159018874327393`*^9}, {3.615901917465109*^9, 3.615901923273336*^9}}],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"shell", "=", 
-   RowBox[{"readShell", "[", 
-    RowBox[{
-     RowBox[{"movieFileNames", "[", "]"}], "[", 
-     RowBox[{"[", 
-      RowBox[{"-", "1"}], "]"}], "]"}], "]"}]}], ";"}]], "Input",
- CellChangeTimes->{{3.6158371190523643`*^9, 3.615837140946227*^9}, {
-  3.61583780093826*^9, 3.615837803962118*^9}}],
+  RowBox[{"names", "=", 
+   RowBox[{"resultsFileNames", "[", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.615899805804779*^9, 3.615899808480297*^9}, {
+  3.6159003773176317`*^9, 3.615900381867834*^9}}],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{"Length", "[", 
-  RowBox[{"shell", "[", 
-   RowBox[{"[", "5", "]"}], "]"}], "]"}]], "Input",
- CellChangeTimes->{{3.6158403587917957`*^9, 3.615840364524974*^9}}],
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"plotShell", "[", 
+    RowBox[{"readShell", "[", "name", "]"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"name", ",", "names"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.615837144135264*^9, 3.6158371476023493`*^9}, {
+  3.6159003904602423`*^9, 3.615900402925029*^9}, {3.615900519066736*^9, 
+  3.615900522314855*^9}}],
 
-Cell[BoxData["450"], "Output",
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`name$$ = 
+    "/Users/jef/builds/shell_analysis/results/run01_00040.shell", 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`name$$], {
+      "/Users/jef/builds/shell_analysis/results/run01_00000.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00002.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00003.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00004.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00012.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00014.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00016.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00024.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00026.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00027.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00028.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00032.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00036.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00038.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00039.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00040.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00043.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00044.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00046.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00048.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00050.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00051.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00052.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00055.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00056.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00057.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00060.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00062.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00063.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00066.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00067.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00068.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00074.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00077.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00079.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00081.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00089.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00095.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00098.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00101.shell", 
+       "/Users/jef/builds/shell_analysis/results/run01_00107.shell"}}}, 
+    Typeset`size$$ = {360., {178., 182.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`name$13432$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`name$$ = 
+        "/Users/jef/builds/shell_analysis/results/run01_00000.shell"}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`name$$, $CellContext`name$13432$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> $CellContext`plotShell[
+        $CellContext`readShell[$CellContext`name$$]], 
+      "Specifications" :> {{$CellContext`name$$, {
+         "/Users/jef/builds/shell_analysis/results/run01_00000.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00002.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00003.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00004.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00012.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00014.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00016.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00024.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00026.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00027.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00028.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00032.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00036.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00038.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00039.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00040.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00043.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00044.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00046.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00048.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00050.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00051.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00052.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00055.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00056.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00057.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00060.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00062.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00063.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00066.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00067.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00068.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00074.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00077.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00079.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00081.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00089.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00095.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00098.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00101.shell", 
+          "/Users/jef/builds/shell_analysis/results/run01_00107.shell"}}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{452., {222., 227.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
  CellChangeTimes->{
-  3.615840366692355*^9, 3.6158405644839973`*^9, {3.6158406531928177`*^9, 
-   3.615840655981482*^9}, 3.615840967181038*^9, 3.6158410546536818`*^9, {
-   3.6158416423986893`*^9, 3.615841645306164*^9}, 3.615842236189878*^9}]
-}, Open  ]],
-
-Cell[CellGroupData[{
+  3.6158371484524593`*^9, 3.6158378058836203`*^9, 3.61583804713125*^9, 
+   3.6158390920637836`*^9, 3.615839733406447*^9, 3.615840116253771*^9, 
+   3.6158403320169153`*^9, 3.615900404788509*^9, 3.615900523096344*^9, {
+   3.615900871940935*^9, 3.615900880242989*^9}}],
 
 Cell[BoxData[
- RowBox[{"plotShell", "[", "shell", "]"}]], "Input",
- CellChangeTimes->{{3.615837144135264*^9, 3.6158371476023493`*^9}}],
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00050.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615903503093441*^9}],
 
 Cell[BoxData[
- Graphics3DBox[GraphicsComplex3DBox[CompressedData["
-1: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
-   "], {
-    {RGBColor[0, 0, 1], EdgeForm[{GrayLevel[0], Thickness[Large]}], 
-     Polygon3DBox[{1, 2, 3}], Polygon3DBox[{2, 4, 3}], 
-     Polygon3DBox[{1, 5, 2}], Polygon3DBox[{2, 6, 4}], 
-     Polygon3DBox[{2, 7, 6}], Polygon3DBox[{5, 7, 2}], 
-     Polygon3DBox[{6, 8, 4}], Polygon3DBox[{4, 9, 3}], 
-     Polygon3DBox[{4, 10, 9}], Polygon3DBox[{8, 10, 4}], 
-     Polygon3DBox[{3, 11, 1}], Polygon3DBox[{9, 12, 3}], 
-     Polygon3DBox[{12, 11, 3}], Polygon3DBox[{6, 13, 8}], 
-     Polygon3DBox[{7, 14, 6}], Polygon3DBox[{14, 13, 6}], 
-     Polygon3DBox[{1, 15, 5}], Polygon3DBox[{11, 16, 1}], 
-     Polygon3DBox[{16, 15, 1}], Polygon3DBox[{5, 17, 7}], 
-     Polygon3DBox[{7, 18, 14}], Polygon3DBox[{17, 18, 7}], 
-     Polygon3DBox[{5, 19, 17}], Polygon3DBox[{15, 19, 5}], 
-     Polygon3DBox[{16, 20, 15}], Polygon3DBox[{15, 21, 19}], 
-     Polygon3DBox[{20, 21, 15}], Polygon3DBox[{19, 22, 17}], 
-     Polygon3DBox[{17, 23, 18}], Polygon3DBox[{22, 23, 17}], 
-     Polygon3DBox[{19, 24, 22}], Polygon3DBox[{21, 24, 19}], 
-     Polygon3DBox[{11, 25, 16}], Polygon3DBox[{16, 26, 20}], 
-     Polygon3DBox[{25, 26, 16}], Polygon3DBox[{12, 27, 11}], 
-     Polygon3DBox[{27, 25, 11}], Polygon3DBox[{18, 28, 14}], 
-     Polygon3DBox[{23, 29, 18}], Polygon3DBox[{29, 28, 18}], 
-     Polygon3DBox[{14, 30, 13}], Polygon3DBox[{28, 30, 14}], 
-     Polygon3DBox[{13, 31, 8}], Polygon3DBox[{8, 32, 10}], 
-     Polygon3DBox[{31, 32, 8}], Polygon3DBox[{30, 33, 13}], 
-     Polygon3DBox[{33, 31, 13}], Polygon3DBox[{20, 34, 21}], 
-     Polygon3DBox[{21, 35, 24}], Polygon3DBox[{34, 35, 21}], 
-     Polygon3DBox[{26, 36, 20}], Polygon3DBox[{36, 34, 20}], 
-     Polygon3DBox[{24, 37, 22}], Polygon3DBox[{22, 38, 23}], 
-     Polygon3DBox[{37, 38, 22}], Polygon3DBox[{38, 39, 23}], 
-     Polygon3DBox[{39, 29, 23}], Polygon3DBox[{24, 40, 37}], 
-     Polygon3DBox[{35, 40, 24}], Polygon3DBox[{10, 41, 9}], 
-     Polygon3DBox[{9, 42, 12}], Polygon3DBox[{41, 42, 9}], 
-     Polygon3DBox[{42, 43, 12}], Polygon3DBox[{43, 27, 12}], 
-     Polygon3DBox[{10, 44, 41}], Polygon3DBox[{32, 44, 10}], 
-     Polygon3DBox[{37, 45, 38}], Polygon3DBox[{38, 46, 39}], 
-     Polygon3DBox[{45, 46, 38}], Polygon3DBox[{37, 47, 45}], 
-     Polygon3DBox[{40, 47, 37}], Polygon3DBox[{39, 48, 29}], 
-     Polygon3DBox[{29, 49, 28}], Polygon3DBox[{48, 49, 29}], 
-     Polygon3DBox[{28, 50, 30}], Polygon3DBox[{49, 50, 28}], 
-     Polygon3DBox[{50, 51, 30}], Polygon3DBox[{51, 33, 30}], 
-     Polygon3DBox[{46, 52, 39}], Polygon3DBox[{52, 48, 39}], 
-     Polygon3DBox[{25, 53, 26}], Polygon3DBox[{27, 54, 25}], 
-     Polygon3DBox[{54, 53, 25}], Polygon3DBox[{53, 55, 26}], 
-     Polygon3DBox[{55, 36, 26}], Polygon3DBox[{27, 56, 54}], 
-     Polygon3DBox[{43, 56, 27}], Polygon3DBox[{36, 57, 34}], 
-     Polygon3DBox[{34, 58, 35}], Polygon3DBox[{57, 58, 34}], 
-     Polygon3DBox[{35, 59, 40}], Polygon3DBox[{58, 59, 35}], 
-     Polygon3DBox[{59, 60, 40}], Polygon3DBox[{60, 47, 40}], 
-     Polygon3DBox[{55, 61, 36}], Polygon3DBox[{61, 57, 36}], 
-     Polygon3DBox[{31, 62, 32}], Polygon3DBox[{33, 63, 31}], 
-     Polygon3DBox[{63, 62, 31}], Polygon3DBox[{33, 64, 63}], 
-     Polygon3DBox[{51, 64, 33}], Polygon3DBox[{62, 65, 32}], 
-     Polygon3DBox[{65, 44, 32}], Polygon3DBox[{42, 66, 43}], 
-     Polygon3DBox[{41, 67, 42}], Polygon3DBox[{67, 66, 42}], 
-     Polygon3DBox[{44, 68, 41}], Polygon3DBox[{68, 67, 41}], 
-     Polygon3DBox[{66, 69, 43}], Polygon3DBox[{69, 56, 43}], 
-     Polygon3DBox[{65, 70, 44}], Polygon3DBox[{70, 68, 44}], 
-     Polygon3DBox[{48, 71, 49}], Polygon3DBox[{49, 72, 50}], 
-     Polygon3DBox[{71, 72, 49}], Polygon3DBox[{50, 73, 51}], 
-     Polygon3DBox[{72, 73, 50}], Polygon3DBox[{48, 74, 71}], 
-     Polygon3DBox[{52, 74, 48}], Polygon3DBox[{73, 75, 51}], 
-     Polygon3DBox[{75, 64, 51}], Polygon3DBox[{54, 76, 53}], 
-     Polygon3DBox[{56, 77, 54}], Polygon3DBox[{77, 76, 54}], 
-     Polygon3DBox[{53, 78, 55}], Polygon3DBox[{76, 78, 53}], 
-     Polygon3DBox[{78, 79, 55}], Polygon3DBox[{79, 61, 55}], 
-     Polygon3DBox[{69, 80, 56}], Polygon3DBox[{80, 77, 56}], 
-     Polygon3DBox[{77, 81, 76}], Polygon3DBox[{76, 82, 78}], 
-     Polygon3DBox[{81, 82, 76}], Polygon3DBox[{82, 83, 78}], 
-     Polygon3DBox[{83, 79, 78}], Polygon3DBox[{77, 84, 81}], 
-     Polygon3DBox[{80, 84, 77}], Polygon3DBox[{62, 85, 65}], 
-     Polygon3DBox[{63, 86, 62}], Polygon3DBox[{86, 85, 62}], 
-     Polygon3DBox[{64, 87, 63}], Polygon3DBox[{87, 86, 63}], 
-     Polygon3DBox[{85, 88, 65}], Polygon3DBox[{88, 70, 65}], 
-     Polygon3DBox[{64, 89, 87}], Polygon3DBox[{75, 89, 64}], 
-     Polygon3DBox[{68, 90, 67}], Polygon3DBox[{67, 91, 66}], 
-     Polygon3DBox[{90, 91, 67}], Polygon3DBox[{70, 92, 68}], 
-     Polygon3DBox[{92, 90, 68}], Polygon3DBox[{66, 93, 69}], 
-     Polygon3DBox[{91, 93, 66}], Polygon3DBox[{69, 94, 80}], 
-     Polygon3DBox[{93, 94, 69}], Polygon3DBox[{80, 95, 84}], 
-     Polygon3DBox[{94, 95, 80}], Polygon3DBox[{88, 96, 70}], 
-     Polygon3DBox[{96, 92, 70}], Polygon3DBox[{91, 97, 93}], 
-     Polygon3DBox[{90, 98, 91}], Polygon3DBox[{98, 97, 91}], 
-     Polygon3DBox[{92, 99, 90}], Polygon3DBox[{99, 98, 90}], 
-     Polygon3DBox[{93, 100, 94}], Polygon3DBox[{97, 100, 93}], 
-     Polygon3DBox[{96, 101, 92}], Polygon3DBox[{101, 99, 92}], 
-     Polygon3DBox[{94, 102, 95}], Polygon3DBox[{100, 102, 94}], 
-     Polygon3DBox[{99, 103, 98}], Polygon3DBox[{98, 104, 97}], 
-     Polygon3DBox[{103, 104, 98}], Polygon3DBox[{97, 105, 100}], 
-     Polygon3DBox[{104, 105, 97}], Polygon3DBox[{99, 106, 103}], 
-     Polygon3DBox[{101, 106, 99}], Polygon3DBox[{105, 107, 100}], 
-     Polygon3DBox[{107, 102, 100}], Polygon3DBox[{85, 108, 88}], 
-     Polygon3DBox[{86, 109, 85}], Polygon3DBox[{109, 108, 85}], 
-     Polygon3DBox[{88, 110, 96}], Polygon3DBox[{108, 110, 88}], 
-     Polygon3DBox[{87, 111, 86}], Polygon3DBox[{111, 109, 86}], 
-     Polygon3DBox[{96, 112, 101}], Polygon3DBox[{110, 112, 96}], 
-     Polygon3DBox[{89, 113, 87}], Polygon3DBox[{113, 111, 87}], 
-     Polygon3DBox[{101, 114, 106}], Polygon3DBox[{112, 114, 101}], 
-     Polygon3DBox[{61, 115, 57}], Polygon3DBox[{57, 116, 58}], 
-     Polygon3DBox[{115, 116, 57}], Polygon3DBox[{79, 117, 61}], 
-     Polygon3DBox[{117, 115, 61}], Polygon3DBox[{58, 118, 59}], 
-     Polygon3DBox[{116, 118, 58}], Polygon3DBox[{83, 119, 79}], 
-     Polygon3DBox[{119, 117, 79}], Polygon3DBox[{59, 120, 60}], 
-     Polygon3DBox[{118, 120, 59}], Polygon3DBox[{109, 121, 108}], 
-     Polygon3DBox[{108, 122, 110}], Polygon3DBox[{121, 122, 108}], 
-     Polygon3DBox[{111, 123, 109}], Polygon3DBox[{123, 121, 109}], 
-     Polygon3DBox[{110, 124, 112}], Polygon3DBox[{122, 124, 110}], 
-     Polygon3DBox[{113, 125, 111}], Polygon3DBox[{125, 123, 111}], 
-     Polygon3DBox[{84, 126, 81}], Polygon3DBox[{95, 127, 84}], 
-     Polygon3DBox[{127, 126, 84}], Polygon3DBox[{81, 128, 82}], 
-     Polygon3DBox[{126, 128, 81}], Polygon3DBox[{102, 129, 95}], 
-     Polygon3DBox[{129, 127, 95}], Polygon3DBox[{82, 130, 83}], 
-     Polygon3DBox[{128, 130, 82}], Polygon3DBox[{107, 131, 102}], 
-     Polygon3DBox[{131, 129, 102}], Polygon3DBox[{83, 132, 119}], 
-     Polygon3DBox[{130, 132, 83}], Polygon3DBox[{72, 133, 73}], 
-     Polygon3DBox[{73, 134, 75}], Polygon3DBox[{133, 134, 73}], 
-     Polygon3DBox[{71, 135, 72}], Polygon3DBox[{135, 133, 72}], 
-     Polygon3DBox[{75, 136, 89}], Polygon3DBox[{134, 136, 75}], 
-     Polygon3DBox[{89, 137, 113}], Polygon3DBox[{136, 137, 89}], 
-     Polygon3DBox[{113, 138, 125}], Polygon3DBox[{137, 138, 113}], 
-     Polygon3DBox[{74, 139, 71}], Polygon3DBox[{139, 135, 71}], 
-     Polygon3DBox[{126, 140, 128}], Polygon3DBox[{127, 141, 126}], 
-     Polygon3DBox[{141, 140, 126}], Polygon3DBox[{129, 142, 127}], 
-     Polygon3DBox[{142, 141, 127}], Polygon3DBox[{128, 143, 130}], 
-     Polygon3DBox[{140, 143, 128}], Polygon3DBox[{124, 144, 112}], 
-     Polygon3DBox[{144, 114, 112}], Polygon3DBox[{129, 145, 142}], 
-     Polygon3DBox[{131, 145, 129}], Polygon3DBox[{45, 146, 46}], 
-     Polygon3DBox[{47, 147, 45}], Polygon3DBox[{147, 146, 45}], 
-     Polygon3DBox[{46, 148, 52}], Polygon3DBox[{146, 148, 46}], 
-     Polygon3DBox[{60, 149, 47}], Polygon3DBox[{149, 147, 47}], 
-     Polygon3DBox[{52, 150, 74}], Polygon3DBox[{148, 150, 52}], 
-     Polygon3DBox[{120, 151, 60}], Polygon3DBox[{151, 149, 60}], 
-     Polygon3DBox[{74, 152, 139}], Polygon3DBox[{150, 152, 74}], 
-     Polygon3DBox[{103, 153, 104}], Polygon3DBox[{104, 154, 105}], 
-     Polygon3DBox[{153, 154, 104}], Polygon3DBox[{106, 155, 103}], 
-     Polygon3DBox[{155, 153, 103}], Polygon3DBox[{105, 156, 107}], 
-     Polygon3DBox[{154, 156, 105}], Polygon3DBox[{114, 157, 106}], 
-     Polygon3DBox[{157, 155, 106}], Polygon3DBox[{107, 158, 131}], 
-     Polygon3DBox[{156, 158, 107}], Polygon3DBox[{144, 159, 114}], 
-     Polygon3DBox[{159, 157, 114}], Polygon3DBox[{131, 160, 145}], 
-     Polygon3DBox[{158, 160, 131}], Polygon3DBox[{146, 161, 148}], 
-     Polygon3DBox[{147, 162, 146}], Polygon3DBox[{162, 161, 146}], 
-     Polygon3DBox[{148, 163, 150}], Polygon3DBox[{161, 163, 148}], 
-     Polygon3DBox[{149, 164, 147}], Polygon3DBox[{164, 162, 147}], 
-     Polygon3DBox[{151, 165, 149}], Polygon3DBox[{165, 164, 149}], 
-     Polygon3DBox[{150, 166, 152}], Polygon3DBox[{163, 166, 150}], 
-     Polygon3DBox[{155, 167, 153}], Polygon3DBox[{153, 168, 154}], 
-     Polygon3DBox[{167, 168, 153}], Polygon3DBox[{157, 169, 155}], 
-     Polygon3DBox[{169, 167, 155}], Polygon3DBox[{154, 170, 156}], 
-     Polygon3DBox[{168, 170, 154}], Polygon3DBox[{156, 171, 158}], 
-     Polygon3DBox[{170, 171, 156}], Polygon3DBox[{143, 172, 130}], 
-     Polygon3DBox[{172, 132, 130}], Polygon3DBox[{157, 173, 169}], 
-     Polygon3DBox[{159, 173, 157}], Polygon3DBox[{121, 174, 122}], 
-     Polygon3DBox[{123, 175, 121}], Polygon3DBox[{175, 174, 121}], 
-     Polygon3DBox[{122, 176, 124}], Polygon3DBox[{174, 176, 122}], 
-     Polygon3DBox[{125, 177, 123}], Polygon3DBox[{177, 175, 123}], 
-     Polygon3DBox[{124, 178, 144}], Polygon3DBox[{176, 178, 124}], 
-     Polygon3DBox[{144, 179, 159}], Polygon3DBox[{178, 179, 144}], 
-     Polygon3DBox[{138, 180, 125}], Polygon3DBox[{180, 177, 125}], 
-     Polygon3DBox[{159, 181, 173}], Polygon3DBox[{179, 181, 159}], 
-     Polygon3DBox[{117, 182, 115}], Polygon3DBox[{115, 183, 116}], 
-     Polygon3DBox[{182, 183, 115}], Polygon3DBox[{119, 184, 117}], 
-     Polygon3DBox[{184, 182, 117}], Polygon3DBox[{116, 185, 118}], 
-     Polygon3DBox[{183, 185, 116}], Polygon3DBox[{118, 186, 120}], 
-     Polygon3DBox[{185, 186, 118}], Polygon3DBox[{132, 187, 119}], 
-     Polygon3DBox[{187, 184, 119}], Polygon3DBox[{120, 188, 151}], 
-     Polygon3DBox[{186, 188, 120}], Polygon3DBox[{172, 189, 132}], 
-     Polygon3DBox[{189, 187, 132}], Polygon3DBox[{151, 190, 165}], 
-     Polygon3DBox[{188, 190, 151}], Polygon3DBox[{174, 191, 176}], 
-     Polygon3DBox[{175, 192, 174}], Polygon3DBox[{192, 191, 174}], 
-     Polygon3DBox[{177, 193, 175}], Polygon3DBox[{193, 192, 175}], 
-     Polygon3DBox[{176, 194, 178}], Polygon3DBox[{191, 194, 176}], 
-     Polygon3DBox[{178, 195, 179}], Polygon3DBox[{194, 195, 178}], 
-     Polygon3DBox[{180, 196, 177}], Polygon3DBox[{196, 193, 177}], 
-     Polygon3DBox[{179, 197, 181}], Polygon3DBox[{195, 197, 179}], 
-     Polygon3DBox[{182, 198, 183}], Polygon3DBox[{184, 199, 182}], 
-     Polygon3DBox[{199, 198, 182}], Polygon3DBox[{183, 200, 185}], 
-     Polygon3DBox[{198, 200, 183}], Polygon3DBox[{187, 201, 184}], 
-     Polygon3DBox[{201, 199, 184}], Polygon3DBox[{185, 202, 186}], 
-     Polygon3DBox[{200, 202, 185}], Polygon3DBox[{186, 203, 188}], 
-     Polygon3DBox[{202, 203, 186}], Polygon3DBox[{171, 204, 158}], 
-     Polygon3DBox[{204, 160, 158}], Polygon3DBox[{187, 205, 201}], 
-     Polygon3DBox[{189, 205, 187}], Polygon3DBox[{141, 206, 140}], 
-     Polygon3DBox[{142, 207, 141}], Polygon3DBox[{207, 206, 141}], 
-     Polygon3DBox[{140, 208, 143}], Polygon3DBox[{206, 208, 140}], 
-     Polygon3DBox[{145, 209, 142}], Polygon3DBox[{209, 207, 142}], 
-     Polygon3DBox[{143, 210, 172}], Polygon3DBox[{208, 210, 143}], 
-     Polygon3DBox[{160, 211, 145}], Polygon3DBox[{211, 209, 145}], 
-     Polygon3DBox[{172, 212, 189}], Polygon3DBox[{210, 212, 172}], 
-     Polygon3DBox[{204, 213, 160}], Polygon3DBox[{213, 211, 160}], 
-     Polygon3DBox[{189, 214, 205}], Polygon3DBox[{212, 214, 189}], 
-     Polygon3DBox[{133, 215, 134}], Polygon3DBox[{134, 216, 136}], 
-     Polygon3DBox[{215, 216, 134}], Polygon3DBox[{135, 217, 133}], 
-     Polygon3DBox[{217, 215, 133}], Polygon3DBox[{139, 218, 135}], 
-     Polygon3DBox[{218, 217, 135}], Polygon3DBox[{136, 219, 137}], 
-     Polygon3DBox[{216, 219, 136}], Polygon3DBox[{152, 220, 139}], 
-     Polygon3DBox[{220, 218, 139}], Polygon3DBox[{137, 221, 138}], 
-     Polygon3DBox[{219, 221, 137}], Polygon3DBox[{138, 222, 180}], 
-     Polygon3DBox[{221, 222, 138}], Polygon3DBox[{166, 223, 152}], 
-     Polygon3DBox[{223, 220, 152}], Polygon3DBox[{180, 224, 196}], 
-     Polygon3DBox[{222, 224, 180}], Polygon3DBox[{207, 225, 206}], 
-     Polygon3DBox[{206, 226, 208}], Polygon3DBox[{225, 226, 206}], 
-     Polygon3DBox[{209, 227, 207}], Polygon3DBox[{227, 225, 207}], 
-     Polygon3DBox[{208, 228, 210}], Polygon3DBox[{226, 228, 208}], 
-     Polygon3DBox[{211, 229, 209}], Polygon3DBox[{229, 227, 209}], 
-     Polygon3DBox[{210, 230, 212}], Polygon3DBox[{228, 230, 210}], 
-     Polygon3DBox[{213, 231, 211}], Polygon3DBox[{231, 229, 211}], 
-     Polygon3DBox[{212, 232, 214}], Polygon3DBox[{230, 232, 212}], 
-     Polygon3DBox[{215, 233, 216}], Polygon3DBox[{217, 234, 215}], 
-     Polygon3DBox[{234, 233, 215}], Polygon3DBox[{216, 235, 219}], 
-     Polygon3DBox[{233, 235, 216}], Polygon3DBox[{218, 236, 217}], 
-     Polygon3DBox[{236, 234, 217}], Polygon3DBox[{219, 237, 221}]}, 
-    {RGBColor[1, 0, 0], Thickness[Large], Line3DBox[{162, 161}], 
-     Line3DBox[{161, 163}], Line3DBox[{164, 162}], Line3DBox[{165, 164}], 
-     Line3DBox[{163, 166}], Line3DBox[{167, 168}], Line3DBox[{169, 167}], 
-     Line3DBox[{168, 170}], Line3DBox[{170, 171}], Line3DBox[{173, 169}], 
-     Line3DBox[{181, 173}], Line3DBox[{190, 165}], Line3DBox[{188, 190}], 
-     Line3DBox[{192, 191}], Line3DBox[{193, 192}], Line3DBox[{191, 194}], 
-     Line3DBox[{194, 195}], Line3DBox[{196, 193}], Line3DBox[{197, 181}], 
-     Line3DBox[{195, 197}], Line3DBox[{199, 198}], Line3DBox[{198, 200}], 
-     Line3DBox[{201, 199}], Line3DBox[{200, 202}], Line3DBox[{203, 188}], 
-     Line3DBox[{202, 203}], Line3DBox[{171, 204}], Line3DBox[{205, 201}], 
-     Line3DBox[{204, 213}], Line3DBox[{214, 205}], Line3DBox[{220, 218}], 
-     Line3DBox[{221, 222}], Line3DBox[{166, 223}], Line3DBox[{223, 220}], 
-     Line3DBox[{224, 196}], Line3DBox[{222, 224}], Line3DBox[{225, 226}], 
-     Line3DBox[{227, 225}], Line3DBox[{226, 228}], Line3DBox[{229, 227}], 
-     Line3DBox[{228, 230}], Line3DBox[{213, 231}], Line3DBox[{231, 229}], 
-     Line3DBox[{232, 214}], Line3DBox[{230, 232}], Line3DBox[{234, 233}], 
-     Line3DBox[{235, 219}], Line3DBox[{233, 235}], Line3DBox[{218, 236}], 
-     Line3DBox[{236, 234}], Line3DBox[{219, 237}], Line3DBox[{237, 221}]}}],
-  ImageSize->{360., 360.},
-  Lighting->"Neutral",
-  ViewAngle->0.38904328438593416`,
-  ViewPoint->{0.6492311969814895, -2.5234007686157396`, 2.1589227438274614`},
-  ViewVertical->{-0.3842820982549874, -0.5641202237332887, 
-   1.9363234098366038`}]], "Output",
- CellChangeTimes->{3.6158371484524593`*^9, 3.6158378058836203`*^9, 
-  3.61583804713125*^9, 3.6158390920637836`*^9, 3.615839733406447*^9, 
-  3.615840116253771*^9, 3.6158403320169153`*^9}]
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00050.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615903503119301*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00050.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590350313818*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615903503174489*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615903503228943*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159035032723017`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615903503316037*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615903503353464*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615903503386244*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590350343604*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00050.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049176435*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00050.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049208764*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00050.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049243614*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049294281*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050492953863`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049333481*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049374567*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049396092*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049438105*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905049489647*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00051.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590505393365*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00051.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050539863033`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00051.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050539874268`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054022993*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054054356*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054095456*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054136531*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054157991*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054231287*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590505427269*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054324087*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+itform\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905054351574*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00052.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056471375*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00052.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056517149*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00052.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056518282*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056582273*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056583383*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056620064*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056661253*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050566894913`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056725225*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056767604*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905056820919*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+itform\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050568428164`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00057.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905062921463*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00057.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905062962138*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00057.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905062985187*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905063035696*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905063036827*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050630731077`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905063114869*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905063136331*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905063178855*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050632242193`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00062.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905072471262*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00062.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905072505989*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00062.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905072521006*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905072554346*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050725790358`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050726206627`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905072661929*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905072688231*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050727264347`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905072788989*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00074.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905092053788*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00074.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905092086261*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00074.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905092110196*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050921599693`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050921762543`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905092209115*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905092252789*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905092276524*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905092326962*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590509235782*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00077.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590509491642*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00077.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905094917694*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00077.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905095003498*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050950046177`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905095005584*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905095039009*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905095082144*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590509511976*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905095149192*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905095206059*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00079.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905097452703*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00079.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050974886293`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00079.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590509750392*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050975373163`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050975600767`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905097601728*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905097643016*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905097670701*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905097706973*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159050977508307`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00089.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123171842*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00089.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123215107*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00089.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051232163*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123238296*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123287842*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123322221*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051233637133`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123388978*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123428463*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905123471465*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00095.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126045765*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00095.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590512608817*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00095.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126089368*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126110798*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126160839*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126207981*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126262306*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126263393*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051263109713`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905126342329*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00098.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051285160427`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00098.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051285673523`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00098.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590512856854*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905128582432*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590512862173*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051286625*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905128703341*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905128724622*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051287665167`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051288095617`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00101.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051311545*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00101.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905131197874*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00101.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905131199086*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051312208843`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905131270615*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051313018513`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905131343096*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905131370957*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905131407215*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051314534483`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00107.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051336050663`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00107.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133653879*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00107.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133655078*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133706259*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133742138*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133792059*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133829946*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133831029*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905133858892*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051339027643`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00046.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905137439455*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00046.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905137476713*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00046.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590513749992*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905137550761*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905137551943*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905137599996*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590513763174*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905137653914*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905137695916*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051377391987`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00040.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181452434*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00040.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181453802*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00040.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590518150391*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181505096*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051815380783`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181580059*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181622229*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181643894*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051816870813`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181729383*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051817730618`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+itform\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905181795258*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00040.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905197742367*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00040.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905197779978*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Read", "::", "readn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Invalid real number found when reading from \
+\[NoBreak]\\!\\(\\\"/Users/jef/builds/shell_analysis/results/run01_00040.\
+shell\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Read/readn\\\", ButtonNote -> \
+\\\"Read::readn\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051978021183`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Read :: \
+readn\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905197852315*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905197853517*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051978905993`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \[NoBreak]\\!\\({$Failed}\\)\[NoBreak] does not \
+have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.61590519793165*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051979688587`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905197995047*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905198036483*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "itform"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\(\\(\\((\\(\\(\\(#1 \[Equal] \
+\\\"true\\\"\\)\\) &\\))\\)\\)[\\(\\({$Failed}\\)\\)]\\)\[NoBreak] at \
+position \[NoBreak]\\!\\(2\\)\[NoBreak] does not have the correct form for an \
+iterator. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/itform\\\", ButtonNote -> \
+\\\"Table::itform\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.615905198077763*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
+itform\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6159051981029387`*^9}]
 }, Open  ]]
 },
 WindowSize->{740, 818},
@@ -714,16 +2879,190 @@ Notebook[{
 Cell[557, 20, 189, 4, 28, "Input"],
 Cell[749, 26, 328, 8, 28, "Input"],
 Cell[1080, 36, 324, 8, 28, "Input"],
-Cell[1407, 46, 7828, 202, 760, "Input"],
-Cell[9238, 250, 1702, 45, 199, "Input"],
-Cell[10943, 297, 341, 9, 28, "Input"],
+Cell[1407, 46, 11040, 273, 1134, "Input"],
+Cell[12450, 321, 3323, 89, 250, "Input"],
+Cell[15776, 412, 227, 5, 28, "Input"],
 Cell[CellGroupData[{
-Cell[11309, 310, 183, 4, 28, "Input"],
-Cell[11495, 316, 271, 4, 28, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[11803, 325, 134, 2, 28, "Input"],
-Cell[11940, 329, 23068, 363, 375, "Output"]
+Cell[16028, 421, 388, 9, 28, "Input"],
+Cell[16419, 432, 7847, 124, 466, "Output"],
+Cell[24269, 558, 518, 11, 41, "Message"],
+Cell[24790, 571, 518, 11, 41, "Message"],
+Cell[25311, 584, 517, 11, 41, "Message"],
+Cell[25831, 597, 528, 11, 24, "Message"],
+Cell[26362, 610, 462, 10, 24, "Message"],
+Cell[26827, 622, 464, 10, 24, "Message"],
+Cell[27294, 634, 462, 10, 24, "Message"],
+Cell[27759, 646, 529, 11, 24, "Message"],
+Cell[28291, 659, 598, 12, 24, "Message"],
+Cell[28892, 673, 597, 12, 24, "Message"],
+Cell[29492, 687, 518, 11, 41, "Message"],
+Cell[30013, 700, 518, 11, 41, "Message"],
+Cell[30534, 713, 518, 11, 41, "Message"],
+Cell[31055, 726, 528, 11, 24, "Message"],
+Cell[31586, 739, 464, 10, 24, "Message"],
+Cell[32053, 751, 462, 10, 24, "Message"],
+Cell[32518, 763, 462, 10, 24, "Message"],
+Cell[32983, 775, 529, 11, 24, "Message"],
+Cell[33515, 788, 598, 12, 24, "Message"],
+Cell[34116, 802, 598, 12, 24, "Message"],
+Cell[34717, 816, 517, 11, 41, "Message"],
+Cell[35237, 829, 520, 11, 41, "Message"],
+Cell[35760, 842, 520, 11, 41, "Message"],
+Cell[36283, 855, 528, 11, 24, "Message"],
+Cell[36814, 868, 462, 10, 24, "Message"],
+Cell[37279, 880, 462, 10, 24, "Message"],
+Cell[37744, 892, 462, 10, 24, "Message"],
+Cell[38209, 904, 529, 11, 24, "Message"],
+Cell[38741, 917, 598, 12, 24, "Message"],
+Cell[39342, 931, 597, 12, 24, "Message"],
+Cell[39942, 945, 598, 12, 24, "Message"],
+Cell[40543, 959, 530, 11, 24, "Message"],
+Cell[41076, 972, 518, 11, 41, "Message"],
+Cell[41597, 985, 518, 11, 41, "Message"],
+Cell[42118, 998, 518, 11, 41, "Message"],
+Cell[42639, 1011, 528, 11, 24, "Message"],
+Cell[43170, 1024, 462, 10, 24, "Message"],
+Cell[43635, 1036, 462, 10, 24, "Message"],
+Cell[44100, 1048, 462, 10, 24, "Message"],
+Cell[44565, 1060, 531, 11, 24, "Message"],
+Cell[45099, 1073, 598, 12, 24, "Message"],
+Cell[45700, 1087, 598, 12, 24, "Message"],
+Cell[46301, 1101, 598, 12, 24, "Message"],
+Cell[46902, 1115, 532, 11, 24, "Message"],
+Cell[47437, 1128, 518, 11, 41, "Message"],
+Cell[47958, 1141, 518, 11, 41, "Message"],
+Cell[48479, 1154, 518, 11, 41, "Message"],
+Cell[49000, 1167, 528, 11, 24, "Message"],
+Cell[49531, 1180, 462, 10, 24, "Message"],
+Cell[49996, 1192, 464, 10, 24, "Message"],
+Cell[50463, 1204, 462, 10, 24, "Message"],
+Cell[50928, 1216, 529, 11, 24, "Message"],
+Cell[51460, 1229, 598, 12, 24, "Message"],
+Cell[52061, 1243, 600, 12, 24, "Message"],
+Cell[52664, 1257, 518, 11, 41, "Message"],
+Cell[53185, 1270, 518, 11, 41, "Message"],
+Cell[53706, 1283, 518, 11, 41, "Message"],
+Cell[54227, 1296, 528, 11, 24, "Message"],
+Cell[54758, 1309, 464, 10, 24, "Message"],
+Cell[55225, 1321, 464, 10, 24, "Message"],
+Cell[55692, 1333, 462, 10, 24, "Message"],
+Cell[56157, 1345, 529, 11, 24, "Message"],
+Cell[56689, 1358, 600, 12, 24, "Message"],
+Cell[57292, 1372, 598, 12, 24, "Message"],
+Cell[57893, 1386, 518, 11, 41, "Message"],
+Cell[58414, 1399, 518, 11, 41, "Message"],
+Cell[58935, 1412, 518, 11, 41, "Message"],
+Cell[59456, 1425, 530, 11, 24, "Message"],
+Cell[59989, 1438, 464, 10, 24, "Message"],
+Cell[60456, 1450, 462, 10, 24, "Message"],
+Cell[60921, 1462, 462, 10, 24, "Message"],
+Cell[61386, 1474, 529, 11, 24, "Message"],
+Cell[61918, 1487, 598, 12, 24, "Message"],
+Cell[62519, 1501, 597, 12, 24, "Message"],
+Cell[63119, 1515, 517, 11, 41, "Message"],
+Cell[63639, 1528, 518, 11, 41, "Message"],
+Cell[64160, 1541, 518, 11, 41, "Message"],
+Cell[64681, 1554, 530, 11, 24, "Message"],
+Cell[65214, 1567, 462, 10, 24, "Message"],
+Cell[65679, 1579, 462, 10, 24, "Message"],
+Cell[66144, 1591, 462, 10, 24, "Message"],
+Cell[66609, 1603, 528, 11, 24, "Message"],
+Cell[67140, 1616, 598, 12, 24, "Message"],
+Cell[67741, 1630, 598, 12, 24, "Message"],
+Cell[68342, 1644, 518, 11, 41, "Message"],
+Cell[68863, 1657, 520, 11, 41, "Message"],
+Cell[69386, 1670, 517, 11, 41, "Message"],
+Cell[69906, 1683, 530, 11, 24, "Message"],
+Cell[70439, 1696, 464, 10, 24, "Message"],
+Cell[70906, 1708, 462, 10, 24, "Message"],
+Cell[71371, 1720, 462, 10, 24, "Message"],
+Cell[71836, 1732, 529, 11, 24, "Message"],
+Cell[72368, 1745, 598, 12, 24, "Message"],
+Cell[72969, 1759, 600, 12, 24, "Message"],
+Cell[73572, 1773, 518, 11, 41, "Message"],
+Cell[74093, 1786, 518, 11, 41, "Message"],
+Cell[74614, 1799, 516, 11, 41, "Message"],
+Cell[75133, 1812, 528, 11, 24, "Message"],
+Cell[75664, 1825, 462, 10, 24, "Message"],
+Cell[76129, 1837, 462, 10, 24, "Message"],
+Cell[76594, 1849, 464, 10, 24, "Message"],
+Cell[77061, 1861, 529, 11, 24, "Message"],
+Cell[77593, 1874, 598, 12, 24, "Message"],
+Cell[78194, 1888, 598, 12, 24, "Message"],
+Cell[78795, 1902, 518, 11, 41, "Message"],
+Cell[79316, 1915, 517, 11, 41, "Message"],
+Cell[79836, 1928, 518, 11, 41, "Message"],
+Cell[80357, 1941, 528, 11, 24, "Message"],
+Cell[80888, 1954, 462, 10, 24, "Message"],
+Cell[81353, 1966, 462, 10, 24, "Message"],
+Cell[81818, 1978, 462, 10, 24, "Message"],
+Cell[82283, 1990, 529, 11, 24, "Message"],
+Cell[82815, 2003, 600, 12, 24, "Message"],
+Cell[83418, 2017, 598, 12, 24, "Message"],
+Cell[84019, 2031, 520, 11, 41, "Message"],
+Cell[84542, 2044, 520, 11, 41, "Message"],
+Cell[85065, 2057, 517, 11, 41, "Message"],
+Cell[85585, 2070, 528, 11, 24, "Message"],
+Cell[86116, 2083, 461, 10, 24, "Message"],
+Cell[86580, 2095, 460, 10, 24, "Message"],
+Cell[87043, 2107, 462, 10, 24, "Message"],
+Cell[87508, 2119, 529, 11, 24, "Message"],
+Cell[88040, 2132, 600, 12, 24, "Message"],
+Cell[88643, 2146, 600, 12, 24, "Message"],
+Cell[89246, 2160, 516, 11, 41, "Message"],
+Cell[89765, 2173, 518, 11, 41, "Message"],
+Cell[90286, 2186, 518, 11, 41, "Message"],
+Cell[90807, 2199, 530, 11, 24, "Message"],
+Cell[91340, 2212, 462, 10, 24, "Message"],
+Cell[91805, 2224, 464, 10, 24, "Message"],
+Cell[92272, 2236, 462, 10, 24, "Message"],
+Cell[92737, 2248, 529, 11, 24, "Message"],
+Cell[93269, 2261, 598, 12, 24, "Message"],
+Cell[93870, 2275, 600, 12, 24, "Message"],
+Cell[94473, 2289, 520, 11, 41, "Message"],
+Cell[94996, 2302, 518, 11, 41, "Message"],
+Cell[95517, 2315, 518, 11, 41, "Message"],
+Cell[96038, 2328, 528, 11, 24, "Message"],
+Cell[96569, 2341, 462, 10, 24, "Message"],
+Cell[97034, 2353, 462, 10, 24, "Message"],
+Cell[97499, 2365, 462, 10, 24, "Message"],
+Cell[97964, 2377, 529, 11, 24, "Message"],
+Cell[98496, 2390, 598, 12, 24, "Message"],
+Cell[99097, 2404, 600, 12, 24, "Message"],
+Cell[99700, 2418, 518, 11, 41, "Message"],
+Cell[100221, 2431, 518, 11, 41, "Message"],
+Cell[100742, 2444, 517, 11, 41, "Message"],
+Cell[101262, 2457, 528, 11, 24, "Message"],
+Cell[101793, 2470, 462, 10, 24, "Message"],
+Cell[102258, 2482, 462, 10, 24, "Message"],
+Cell[102723, 2494, 461, 10, 24, "Message"],
+Cell[103187, 2506, 529, 11, 24, "Message"],
+Cell[103719, 2519, 598, 12, 24, "Message"],
+Cell[104320, 2533, 600, 12, 24, "Message"],
+Cell[104923, 2547, 518, 11, 41, "Message"],
+Cell[105444, 2560, 518, 11, 41, "Message"],
+Cell[105965, 2573, 517, 11, 41, "Message"],
+Cell[106485, 2586, 528, 11, 24, "Message"],
+Cell[107016, 2599, 464, 10, 24, "Message"],
+Cell[107483, 2611, 462, 10, 24, "Message"],
+Cell[107948, 2623, 462, 10, 24, "Message"],
+Cell[108413, 2635, 529, 11, 24, "Message"],
+Cell[108945, 2648, 600, 12, 24, "Message"],
+Cell[109548, 2662, 598, 12, 24, "Message"],
+Cell[110149, 2676, 600, 12, 24, "Message"],
+Cell[110752, 2690, 530, 11, 24, "Message"],
+Cell[111285, 2703, 518, 11, 41, "Message"],
+Cell[111806, 2716, 518, 11, 41, "Message"],
+Cell[112327, 2729, 520, 11, 41, "Message"],
+Cell[112850, 2742, 528, 11, 24, "Message"],
+Cell[113381, 2755, 462, 10, 24, "Message"],
+Cell[113846, 2767, 464, 10, 24, "Message"],
+Cell[114313, 2779, 461, 10, 24, "Message"],
+Cell[114777, 2791, 531, 11, 24, "Message"],
+Cell[115311, 2804, 598, 12, 24, "Message"],
+Cell[115912, 2818, 598, 12, 24, "Message"],
+Cell[116513, 2832, 598, 12, 24, "Message"],
+Cell[117114, 2846, 532, 11, 24, "Message"]
 }, Open  ]]
 }
 ]
