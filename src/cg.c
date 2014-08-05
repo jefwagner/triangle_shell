@@ -245,7 +245,7 @@ double nlcg_optimize( double *x, nlcg_ws g){
     if( (f-f_old < g->tol.df_tol &&
 	 lf.a_prev < g->tol.dx_tol &&
 	 slope < (g->tol.dfdx_tol)*(g->tol.dfdx_tol)) ||
-	g->lf.of.count > g->tol.max_eval){
+          	g->lf.of.count > g->tol.max_eval){
       break;
     }
     /* Calculate the beta factor */
@@ -260,7 +260,7 @@ double nlcg_optimize( double *x, nlcg_ws g){
     }
     if( slope > 0. ){
       for( i=0; i<n; i++){
-	s[i] = -dfdx[i];
+      	s[i] = -dfdx[i];
       }
     }
     /* And repeat */

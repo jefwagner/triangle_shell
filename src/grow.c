@@ -49,7 +49,7 @@ static point new_point( shell *s, shell_params *sp, unsigned int li){
  * Find the opening angle at a vertex on the edge.
  */
 static double get_vertex_angle( shell *s, unsigned int vi){
-  unsigned int lil, lir;
+  unsigned int lil = 0, lir = 0;
   unsigned int vi1, vi3, vi4, vi5;
   double *x1, *x2, *x3, *x4, *x5;
   vertex_lines_on_edge( s, vi, &lil, &lir);
@@ -76,7 +76,7 @@ static double get_vertex_angle( shell *s, unsigned int vi){
  * the opening angle of both vertices.
  */
 static double get_line_angle( shell *s, unsigned int li){
-  unsigned int lil, li_temp, lir;
+  unsigned int lil = 0, li_temp = 0, lir = 0;
   unsigned int vi1, vi2, vi3, vi4, vi5;
   double *x1, *x2, *x3, *x4, *x5;
   double a_l, a_r;
@@ -266,13 +266,35 @@ static int test_attach( shell *s, point p){
  * vertex is renumbered, and returns the new vertex index.
  */
 static unsigned int close_index( shell *s, unsigned int vi){
-  unsigned int lil, lir, vil, vir, vi_min, vi_out;
+  unsigned int lil=0, lir=0, vil, vir, vi_min, vi_out;
   vertex_lines_on_edge( s, vi, &lil, &lir);
   vil = s->l[lil].i[0];
   vir = s->l[lir].i[1];
   vi_min = min( vil, vir);
   vi_out = vi>vi_min?vi-1:vi;
   return vi_out;
+}
+
+static int test_join( const shell *s, unsigned int i, unsigned int j){
+  unsigned int vi0, vi1, vi2, vi3, via, vib;
+  int k, status=1;
+
+  vi0 = s->l[i].i[0];
+  vi1 = s->l[i].i[1];
+  vi2 = s->l[j].i[0];
+  vi3 = s->l[j].i[1];  
+  for( k=0; k<s->num_l; k++){
+    via = s->l[k].i[0];
+    vib = s->l[k].i[1];
+    if((vi0 == via && vi3 == vib) ||
+       (vi0 == vib && vi3 == via) ||
+       (vi1 == via && vi2 == vib) ||
+       (vi1 == vib && vi2 == via) ){
+      status = 0;
+      break;
+    }
+  }
+  return status;
 }
 
 /*!
@@ -282,7 +304,7 @@ static unsigned int close_index( shell *s, unsigned int vi){
 static int merge_move( shell *s, double delta_b){
   int i, j;
   int vi0, vi1, vi2, vi3;
-  double b;
+  double b0, b1;
 
   for( i=0; i<s->num_l-1; i++){
     if( s->ld[i].oe == yes ){
@@ -302,14 +324,16 @@ static int merge_move( shell *s, double delta_b){
           if( vi0 != vi3 && vi1 != vi2 &&
               s->vd[vi0].num_t + s->vd[vi3].num_t <= 6 &&
               s->vd[vi1].num_t + s->vd[vi2].num_t <= 6 ){
-            b = dist( s->v[vi0].x, s->v[vi3].x)
-              + dist( s->v[vi1].x, s->v[vi2].x);
-            if( b < delta_b ){
-              shell_join( s, i, j);
-              vi0 = min(vi0, vi1);
-              vi0 = min(vi0, vi2);
-              vi0 = min(vi0, vi3);
+            b0 = dist( s->v[vi0].x, s->v[vi3].x);
+            b1 = dist( s->v[vi1].x, s->v[vi2].x);
+            if( b0 < 0.5*delta_b && b1 < 0.5*delta_b ){
+              if( test_join(s, i, j)){
+                shell_join( s, i, j);
+                vi0 = min(vi0, vi1);
+                vi0 = min(vi0, vi2);
+                vi0 = min(vi0, vi3);
               return vi0;
+              }
             }
           }
         }

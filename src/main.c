@@ -101,6 +101,7 @@ int main( int argc, const char **argv){
     i++;
     grow_status = grow( sr);
   }
+  printf( "\n");
 
   status += print_shell( sr->s, n, parameter_filename);
 
@@ -214,7 +215,11 @@ int shell_params_initialize( shell_params *sp, const char* filename, int n){
 
 void shell_run_initialize( shell_run *sr, shell_params *sp){
   double z, r_gen = sp->r_genome;
-  z = sqrt(r_gen*r_gen-3./9.);
+  if( r_gen != 0 ){
+    z = sqrt(r_gen*r_gen-3./9.);
+  }else{
+    z = 0.;
+  }
   sr->sp = sp;
   srand( sp->seed);
   shell_initialize( sr->s);
