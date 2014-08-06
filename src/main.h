@@ -59,6 +59,7 @@ typedef struct {
   unsigned int movie;
   unsigned int rp_depth;
   unsigned int max_tri;
+  unsigned int nlcg_max_eval;
 } shell_params;
 
 typedef struct {

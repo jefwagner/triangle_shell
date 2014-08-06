@@ -210,30 +210,35 @@ void nlcg_free( nlcg_ws g){
 double nlcg_optimize( double *x, nlcg_ws g){
   int i, j;
   double f, f_old, denom, num, beta, slope;
-  int n = g->lf.of.n;
-  opt_fn of = g->lf.of;
-  lin_fn lf = g->lf;
-  double *dfdx = lf.dfdx;
-  double *s = lf.s;
+  lin_fn *lf = &(g->lf);
+  opt_fn *of = &(lf->of);
+  int n = of->n;
+  double *dfdx = lf->dfdx;
+  double *s = lf->s;
   double *dfdx_old = g->dfdx_old;
-  lf.x = x;
-  lf.of.count = 0;
+  lf->x = x;
+  of->count = 0;
 
   /* Start off at the initial position */
-  f = opt_fn_eval( x, dfdx, &of);
+  f = opt_fn_eval( x, dfdx, of);
   denom = 0.;
   for( i=0; i<n; i++){
     denom += dfdx[i]*dfdx[i];
     /* The initial search direction is the negative gradient */
     s[i] = -dfdx[i];
   }
+  if( denom < (g->tol.dfdx_tol)*(g->tol.dfdx_tol) &&
+      g->tol.df_tol == DBL_MAX &&
+      g->tol.dx_tol == DBL_MAX ){
+    return f;
+  }
   for( j=0; j<NLCG_ITER_MAX; j++ ){
     /* Do a line search*/
     memcpy( dfdx_old, dfdx, n*sizeof(double));
     f_old = f;
-    f = sw_line_search( f, &lf);
+    f = sw_line_search( f, lf);
     /* Calculate the square magnitude of the gradient */
-/*     printf( "value: %1.3e \n", f); */
+    /* printf( "nlcg: %u \n", of->count); */
     slope = dfdx[0]*dfdx[0];
     num = dfdx[0]*(dfdx[0]-dfdx_old[0]);
     for( i=1; i<n; i++){
@@ -243,9 +248,9 @@ double nlcg_optimize( double *x, nlcg_ws g){
     /* Stop if change in value, change in position, or slope falls
        below some tolerance */
     if( (f-f_old < g->tol.df_tol &&
-	 lf.a_prev < g->tol.dx_tol &&
-	 slope < (g->tol.dfdx_tol)*(g->tol.dfdx_tol)) ||
-          	g->lf.of.count > g->tol.max_eval){
+      	 lf->a_prev < g->tol.dx_tol &&
+	       slope < (g->tol.dfdx_tol)*(g->tol.dfdx_tol)) ||
+         of->count >= g->tol.max_eval){
       break;
     }
     /* Calculate the beta factor */
@@ -459,7 +464,7 @@ static double sw_bracket_search( double f_0, double df_0,
  * stuff.
  */
 static double opt_fn_eval( const double *x, double *dfdx, opt_fn *of){
-  of->count++;
+  (of->count)++;
   return of->f( of->n, x, dfdx, of->p);
 }
 

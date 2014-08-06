@@ -371,7 +371,7 @@ int shell_read( shell *s, FILE *f){
  * listed is the least significant to the most significant.
  */
  #define ND 6
- #define NI 4
+ #define NI 5
 int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   int k; 
   int nd[ND], ni[NI], sd[ND], si[NI]; 
@@ -395,7 +395,8 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
     "seed",
     "movie",
     "rp_depth",
-    "max_tri"
+    "max_tri",
+    "nlcg_max_eval"
   };
   /* List out pointers to the parameter in the program. */
   var_d[0] = &(sp->gamma);
@@ -408,6 +409,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   var_i[1] = (int *) &(sp->movie);
   var_i[2] = (int *) &(sp->rp_depth);
   var_i[3] = (int *) &(sp->max_tri);
+  var_i[4] = (int *) &(sp->nlcg_max_eval);
 
   /* First give the default parameters */
   sp->gamma = 2;
@@ -420,6 +422,7 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   sp->movie = 0;
   sp->rp_depth = 4;
   sp->max_tri = 1500;
+  sp->nlcg_max_eval = 50000;
 
   /* read the parameter file */
   if( pdata_read_file( &pd, file) == PDATA_FORMAT ){
@@ -521,4 +524,6 @@ void shell_params_write( shell_params *sp, FILE *file,
   fprintf( file, "var delta_b %1.10e\n", sp->delta_b);
   fprintf( file, "var seed %u\n", sp->seed);
   fprintf( file, "var movie %u\n", sp->movie);
+  fprintf( file, "var max_tri %u\n", sp->max_tri);
+  fprintf( file, "var nlcg_max_eval %u\n", sp->nlcg_max_eval);
 }

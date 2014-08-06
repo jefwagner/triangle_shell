@@ -79,13 +79,13 @@ int main( int argc, const char **argv){
   grow_status = grow( sr);
   while( grow_status != -1 && 
         sr->s->num_t < sr->sp->max_tri &&
-        max_eval_count < 5 ){
+        max_eval_count < 3 ){
     if( i%10 == 0 ){
       relax_status = relax_total( sr);
     }else{
       relax_status = relax_partial( sr, grow_status);
     }
-    if( relax_status >= 50000){
+    if( relax_status >= sr->sp->nlcg_max_eval){
       max_eval_count++;
     }else{
       max_eval_count = 0;
@@ -229,7 +229,7 @@ void shell_run_initialize( shell_run *sr, shell_params *sp){
   sr->s->p_mem->x[0] = 0.; 
   sr->s->p_mem->x[1] = 0.;
   sr->s->p_mem->x[2] = 0.;
-  nlcg_set_tol( 0., 0., 1.e-4, 50000, sr->nlcg);
+  nlcg_set_tol( 0., 0., 1.e-2, sp->nlcg_max_eval, sr->nlcg);
 }
 
 /*!
