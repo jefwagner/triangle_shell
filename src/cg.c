@@ -23,13 +23,13 @@
 #include <math.h>
 #include "cg.h"
 
-#define NLCG_ITER_MAX 50000
+#define NLCG_ITER_MAX 20000
 #define LS_ITER_MAX 20
 #define BRACKET_ITER_MAX 40
 #define ALPHA_0 1.
-#define DX_TOL 1.e-3
-#define DFDX_TOL 1.e-4
-#define MAX_EVAL 100000
+#define DX_TOL 1.e-2
+#define DFDX_TOL 1.e-3
+#define MAX_EVAL 20000
 #define C1 1.e-4
 #define C2 0.1
 
@@ -211,16 +211,14 @@ double nlcg_optimize( double *x, nlcg_ws g){
   int i, j;
   double f, f_old, denom, num, beta, slope;
   int n = g->lf.of.n;
-  opt_fn of = g->lf.of;
-  lin_fn lf = g->lf;
-  double *dfdx = lf.dfdx;
-  double *s = lf.s;
+  double *dfdx = g->lf.dfdx;
+  double *s = g->lf.s;
   double *dfdx_old = g->dfdx_old;
-  lf.x = x;
-  lf.of.count = 0;
+  g->lf.x = x;
+  g->lf.of.count = 0;
 
   /* Start off at the initial position */
-  f = opt_fn_eval( x, dfdx, &of);
+  f = opt_fn_eval( x, dfdx, &(g->lf.of));
   denom = 0.;
   for( i=0; i<n; i++){
     denom += dfdx[i]*dfdx[i];
@@ -231,7 +229,7 @@ double nlcg_optimize( double *x, nlcg_ws g){
     /* Do a line search*/
     memcpy( dfdx_old, dfdx, n*sizeof(double));
     f_old = f;
-    f = sw_line_search( f, &lf);
+    f = sw_line_search( f, &(g->lf));
     /* Calculate the square magnitude of the gradient */
 /*     printf( "value: %1.3e \n", f); */
     slope = dfdx[0]*dfdx[0];
@@ -243,9 +241,9 @@ double nlcg_optimize( double *x, nlcg_ws g){
     /* Stop if change in value, change in position, or slope falls
        below some tolerance */
     if( (f-f_old < g->tol.df_tol &&
-	 lf.a_prev < g->tol.dx_tol &&
-	 slope < (g->tol.dfdx_tol)*(g->tol.dfdx_tol)) ||
-	g->lf.of.count > g->tol.max_eval){
+	       g->lf.a_prev < g->tol.dx_tol &&
+	       slope < (g->tol.dfdx_tol)*(g->tol.dfdx_tol)) ||
+	      g->lf.of.count > g->tol.max_eval ){
       break;
     }
     /* Calculate the beta factor */
@@ -260,7 +258,7 @@ double nlcg_optimize( double *x, nlcg_ws g){
     }
     if( slope > 0. ){
       for( i=0; i<n; i++){
-	s[i] = -dfdx[i];
+      	s[i] = -dfdx[i];
       }
     }
     /* And repeat */
@@ -459,7 +457,7 @@ static double sw_bracket_search( double f_0, double df_0,
  * stuff.
  */
 static double opt_fn_eval( const double *x, double *dfdx, opt_fn *of){
-  of->count++;
+  of->count += 1;
   return of->f( of->n, x, dfdx, of->p);
 }
 

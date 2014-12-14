@@ -276,6 +276,67 @@ static unsigned int close_index( shell *s, unsigned int vi){
 }
 
 /*!
+ * Merge edges.
+ *
+ * This function checks all pairs of lines. It merges them if:
+ * + Both lines are not on the edge,
+ * and either:
+ * + The lines share a vertex,
+ * + The shared vertex has 6 triangles attached,
+ * or:
+ * + The lines do not share a vertex,
+ * + The distance between the vertices is less than some cutoff.
+ */
+int merge( shell_run *sr){
+  int i, j;
+  int vi0, vi1, vj0, vj1;
+  int ci;
+  double b;
+  shell *s = sr->s;
+  double delta_b = sr->sp->delta_b;
+  for( i=0; i<s->num_l; i++){
+    if( s->ld[i].oe == yes ){
+      for( j=i+1; j<s->num_l; j++){
+        if( s->ld[j].oe == yes ){
+          vi0 = s->l[i].i[0];
+          vi1 = s->l[i].i[1];
+          vj0 = s->l[j].i[0];
+          vj1 = s->l[j].i[1];
+          if( vi0 == vj1 &&
+              s->vd[vi0].num_t == 6 &&
+              s->vd[vi1].num_t + s->vd[vj0].num_t <= 6 ){
+            ci = close_index( s, vi0);
+            shell_close( s, vi0);
+            return ci;
+          }else if( vi1 == vj0 &&
+                    s->vd[vi1].num_t == 6 &&
+                    s->vd[vi0].num_t + s->vd[vj1].num_t <= 6){
+            ci = close_index( s, vi1);
+            shell_close( s, vi1);
+            return ci;
+          }
+          if( vi0 != vj1 &&
+              vi1 != vj0 ){
+            if( s->vd[vi0].num_t + s->vd[vj1].num_t <= 6 &&
+                s->vd[vi1].num_t + s->vd[vj0].num_t <= 6)
+            b = dist( s->v[vi0].x, s->v[vj1].x);
+            b += dist( s->v[vi1].x, s->v[vj0].x);
+            if( b < delta_b){
+              shell_join( s, i, j);
+              vi0 = min( vi0, vj1);
+              vj0 = min( vi1, vj0);
+              vi0 = min( vi0, vj0);
+              return vi0;
+            }
+          }
+        }
+      }
+    }
+  }
+  return -1;
+}
+
+/*!
  * Perform 1 grow move.
  *
  * This function performs a single grow move (attach, insert, close)
@@ -291,22 +352,36 @@ int grow( shell_run *sr ){
   shell_params *sp = sr->sp;
   move *ml = sr->ml;
   double sigma = sr->sp->sigma;
-  double a_cutoff = PI_6;
+  double a_upper = sr->sp->a_upper;
+  double a_lower = sr->sp->a_lower;
+
+  status = merge( sr);
+  if( status >= 0 ){
+    return -2;
+  }
 
   num_k = fill_move_array( s, ml);
   while( num_k > 0 ){
     k = choose_move( num_k, sigma, ml);
     if( ml[k].type == vertex_move){
-      if( ml[k].angle < a_cutoff ){
+      if( ml[k].angle < a_upper ){
         if( test_close( s, ml[k].index)){
-          status = close_index( s, ml[k].index);
-          shell_close( s, ml[k].index);
+          if( ml[k].angle < a_lower ||
+              !test_insert( s, ml[k].index)){
+            status = -2;
+            shell_close( s, ml[k].index);
+            break;
+          }
+          shell_copy( sr->s5, s);
+          status = -3;
+          shell_close( sr->s5, ml[k].index);
+          shell_insert( s, ml[k].index);
           break;
         }
       }
       if( test_insert( s, ml[k].index)){
         status = ml[k].index;
-        shell_insert( s, ml[k].index);
+        shell_insert(s, ml[k].index);
         break;
       }
     }else{

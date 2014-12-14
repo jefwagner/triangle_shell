@@ -21,14 +21,16 @@
 #include "relax.h"
 #include "grow.h"
 
-#define MAX_TRI 100
+#define MAX_TRI 1500
 
 void usage( const char* argv0);
 int get_cl_args( int argc, const char **argv,
                    char *parameter_filename, int *n);
-shell_run* shell_run_malloc( unsigned int max_tri);
+shell_run* shell_run_malloc( shell_params *sp);
 void shell_run_free( shell_run *sr);
-int shell_run_initialize( shell_run *sr, const char* filename, int n);
+int shell_read_params( shell_params *sp, const char* filename, 
+                       unsigned int n);
+int shell_run_initialize( shell_run *sr);
 int create_output_directories( shell_run *sr, const char* filename);
 int print_params( shell_params *sp, unsigned int n, 
                  const char* filename);
@@ -37,9 +39,12 @@ void print_movie_frame( shell *s, unsigned int i);
 
 
 int main( int argc, const char **argv){
-  int n, status, run_status, i;
+  int n, status, grow_status, relax_status;
+  int frame_count, partial_count, relax_long_count;
+  double en6, en5;
   char parameter_filename[80];
   shell_run *sr;
+  shell_params sp;
 
   status = get_cl_args( argc, argv, parameter_filename, &n);
   if( status != 0){
@@ -47,13 +52,18 @@ int main( int argc, const char **argv){
     return status;
   }
 
-  sr = shell_run_malloc( MAX_TRI);
+  status = shell_read_params( &sp, parameter_filename, n);
+  if( status != 0){
+    usage( argv[0]);
+    return status;
+  }
+  sr = shell_run_malloc( &sp);
   if( sr == NULL ){
     fprintf( stderr, "Could not allocated needed memory.\n");
     usage( argv[0]);
     return 1;
   }
-  status = shell_run_initialize( sr, parameter_filename, n);
+  status = shell_run_initialize( sr);
   if( status != 0){
     usage( argv[0]);
     return status;
@@ -65,21 +75,49 @@ int main( int argc, const char **argv){
   }
   status = print_params( sr->sp, n, parameter_filename);
 
-  i=0;
-  run_status = relax( sr);
+  frame_count=0;
+  partial_count=0;
+  relax_status = relax_total( sr, sr->s);
   if( sr->sp->movie ){
-    print_movie_frame( sr->s, i);
+    print_movie_frame( sr->s, frame_count);
   }
-  i++;
-  while( i < 10){
-    run_status = grow( sr);
-    printf( "g: %u  ", run_status);
-    run_status = relax_total( sr);
-    printf( "r: %1.3f %u   ", sr->hmin, run_status);
-    if( sr->sp->movie ){
-      print_movie_frame( sr->s, i);
+  frame_count++;
+  while( sr->s->num_t < sr->sp->max_tri &&
+         relax_long_count < 5 ){
+    grow_status = grow( sr);
+    if( grow_status == -3 ){
+      relax_status = relax_total( sr, sr->s);
+      en6 = sr->hmin/((double) sr->s->num_t);
+      relax_status += relax_total( sr, sr->s5);
+      en5 = sr->hmin/((double) sr->s5->num_t);
+      partial_count = 0;
+      if( en5 < en6 ){
+        shell_copy( sr->s, sr->s5);
+        printf( "g: 5* " ); 
+      }else{
+        printf( "g: 6* " ); 
+      }
+    }else if( grow_status == -2 || partial_count == 20 ){
+      relax_status = relax_total(sr, sr->s);
+      partial_count = 0;
+      printf( "g: * " ); 
+    }else if( grow_status == -1){
+      break;
+    }else{
+      relax_status = relax_partial( sr, grow_status);
+      partial_count++;
+      printf( "g: %u ", grow_status);
     }
-    i++;
+    if( relax_status > 20000){
+      relax_long_count++;
+    }else{
+      relax_long_count = 0;
+    }
+    printf( "r: %1.3f %u   ", sr->hmin, relax_status);
+    if( sr->sp->movie ){
+      print_movie_frame( sr->s, frame_count);
+    }
+    frame_count++;
     printf( "t: %u\n", sr->s->num_t);
   }
 
@@ -121,9 +159,10 @@ int get_cl_args( int argc, const char **argv,
   return status;
 }
 
-shell_run* shell_run_malloc( unsigned int max_tri){
+shell_run* shell_run_malloc( shell_params *sp){
   shell_run *sr;
   unsigned int max_vert, max_moves;
+  unsigned int max_tri = sp->max_tri;
 
   max_vert = max_tri + 2;
   max_moves = 2*max_tri+1 + max_vert; 
@@ -132,29 +171,30 @@ shell_run* shell_run_malloc( unsigned int max_tri){
   if( sr == NULL ){
     return NULL;
   }
-  sr->sp = (shell_params *) malloc( sizeof(shell_params));
-  if( sr->sp == NULL ){
+  sr->sp = sp;
+  sr->s = shell_malloc( max_tri);
+  if( sr->s == NULL ){
     free( sr);
     return NULL;
   }
-  sr->s = shell_malloc( max_tri);
-  if( sr->s == NULL ){
-    free( sr->sp);
+  sr->s5 = shell_malloc( max_tri);
+  if( sr->s5 == NULL ){
+    shell_free( sr->s);
     free( sr);
     return NULL;
   }
   sr->nlcg = nlcg_malloc(max_vert);
   if( sr->nlcg == NULL ){
+    shell_free( sr->s5);
     shell_free( sr->s);
-    free( sr->sp);
     free( sr);
     return NULL;
   }
   sr->ml = (move *) malloc( max_moves*sizeof(move));
   if( sr->ml == NULL){
     nlcg_free( sr->nlcg);
+    shell_free( sr->s5);
     shell_free( sr->s);
-    free( sr->sp);
     free( sr);
     return NULL;
   }
@@ -166,21 +206,20 @@ void shell_run_free( shell_run *sr){
   free( sr->ml);
   nlcg_free( sr->nlcg);
   shell_free( sr->s);
-  free( sr->sp);
   free( sr);
 }
 
-int shell_run_initialize( shell_run *sr, const char* filename, int n){
+int shell_read_params( shell_params *sp, const char *filename, 
+                       unsigned int n){
   int status;
   FILE *f;
-  srand( sr->sp->seed);
   f = fopen( filename, "r");
   if( f == NULL ){
     fprintf( stderr, "Could not open the parameter file %s.\n",
             filename);
     return 1;
   }
-  status = read_param_file( sr->sp, f, n);
+  status = read_param_file( sp, f, n);
   if( status == INOUT_OUT_OF_BOUNDS ){
     fprintf( stderr, "Simulation number out of bounds.\n");
     return 1;
@@ -191,8 +230,13 @@ int shell_run_initialize( shell_run *sr, const char* filename, int n){
     return 1;
   }
   fclose( f);
-  shell_initialize( sr->s);
-  nlcg_set_tol( 0., 0., 1.e-4, 50000, sr->nlcg);
+  return 0;  
+}
+
+int shell_run_initialize( shell_run *sr){
+  srand( sr->sp->seed);
+  shell_initialize( sr->s, sr->sp->r_genome);
+  nlcg_set_tol( 0., 0., 1.e-2, 20000, sr->nlcg);
   return 0;
 }
 

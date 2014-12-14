@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "shell.h"
 #include "math_const.h"
@@ -47,28 +48,29 @@ shell* shell_malloc( unsigned int max_t ){
   if( s== NULL ){ return NULL; }
   max_v = max_t + 2;
   max_l = 2*max_t + 1;
-  s->v = (point *) malloc( max_v*sizeof(point));
-  if( s->v == NULL ){ 
+  s->vg = (point *) malloc( (max_v+1)*sizeof(point));
+  if( s->vg == NULL ){ 
     free( s); 
     return NULL; 
   }
+  s->v = &(s->vg[1]);
   s->vd = (vertex_data *) malloc( max_v*sizeof(vertex_data));
   if( s->vd == NULL ){ 
-    free( s->v); 
+    free( s->vg); 
     free( s);
     return NULL; 
   }
   s->l = (line *) malloc( max_l*sizeof(line));
   if( s->l == NULL ){ 
     free( s->vd);
-    free( s->v); 
+    free( s->vg); 
     free( s);
     return NULL; }
   s->ld = (line_data *) malloc( max_l*sizeof(line_data));
   if( s->ld == NULL ){ 
     free( s->l);
     free( s->vd);
-    free( s->v); 
+    free( s->vg); 
     free( s);
     return NULL; 
   }
@@ -77,7 +79,7 @@ shell* shell_malloc( unsigned int max_t ){
     free( s->ld);
     free( s->l);
     free( s->vd);
-    free( s->v); 
+    free( s->vg); 
     free( s);
     return NULL; 
   }
@@ -87,7 +89,7 @@ shell* shell_malloc( unsigned int max_t ){
     free( s->ld);
     free( s->l);
     free( s->vd);
-    free( s->v); 
+    free( s->vg); 
     free( s);
     return NULL; 
   }
@@ -100,7 +102,7 @@ shell* shell_malloc( unsigned int max_t ){
  */
 void shell_copy( shell *dest, const shell *source){
   dest->num_v = source->num_v;
-  memcpy( dest->v, source->v, source->num_v*sizeof(point));
+  memcpy( dest->vg, source->vg, (source->num_v+1)*sizeof(point));
   memcpy( dest->vd, source->vd, source->num_v*sizeof(vertex_data));
   dest->num_l = source->num_l;
   memcpy( dest->l, source->l, source->num_l*sizeof(line));
@@ -119,7 +121,7 @@ void shell_free( shell *s){
   free( s->ld);
   free( s->l);
   free( s->vd);
-  free( s->v);
+  free( s->vg);
   free( s);
 }
 
@@ -513,14 +515,27 @@ static void merge_line( shell *s, unsigned int li0,
  * Initilization.
  *
  * This function initializes the shell to a single equilateral
- * triangle.
+ * triangle, and sets the center of the genome.
  */
-void shell_initialize( shell *s){
+void shell_initialize( shell *s, double r_genome){
   /* The three points the define the equilateral triangle. */
   point p0 = {{ 0., 0., 0.}};
   point p1 = {{0.5, ROOT3_2, 0.}}; 
   point p2 = {{1., 0., 0.}};
  
+  /* The center of the genome*/
+  double z;
+  if( r_genome != 0.){
+    z = sqrt( r_genome*r_genome+1/3.);
+    s->vg[0].x[0] = 0.5;
+    s->vg[0].x[1] = ROOT3/6.;
+    s->vg[0].x[2] = z;
+  }else{
+    s->vg[0].x[0] = 0.;
+    s->vg[0].x[1] = 0.;
+    s->vg[0].x[2] = 0.;
+  }
+
   /* The shell starts out empty. */
   s->num_v = 0;
   s->num_l = 0;

@@ -42,12 +42,17 @@ typedef struct {
   double r_membrane;
   double r_genome;
   double delta_b;
+  double a_upper;
+  double a_lower;
   unsigned int seed;
   unsigned int movie;
+  unsigned int depth;
+  unsigned int max_tri;
 } shell_params;
 
 typedef struct {
   shell *s;
+  shell *s5;
   shell_params *sp;
   nlcg_ws nlcg;
   double hmin;

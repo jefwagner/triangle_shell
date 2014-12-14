@@ -361,8 +361,8 @@ int shell_read( shell *s, FILE *f){
  * integer parameter chooses from the list, where the first variable
  * listed is the least significant to the most significant.
  */
- #define ND 6
- #define NI 2
+ #define ND 8
+ #define NI 4
 int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   int k; 
   int nd[ND], ni[NI], sd[ND], si[NI]; 
@@ -380,11 +380,15 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
     "sigma", 
     "r_membrane", 
     "r_genome", 
-    "delta_b"
+    "delta_b",
+    "a_upper",
+    "a_lower"
   };
   const char *var_i_names[] = { 
     "seed",
-    "movie"
+    "movie",
+    "depth",
+    "max_tri"
   };
   /* List out pointers to the parameter in the program. */
   var_d[0] = &(sp->gamma);
@@ -393,18 +397,26 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   var_d[3] = &(sp->r_membrane);
   var_d[4] = &(sp->r_genome);
   var_d[5] = &(sp->delta_b);
+  var_d[6] = &(sp->a_upper);
+  var_d[7] = &(sp->a_lower);
   var_i[0] = (int *) &(sp->seed);
   var_i[1] = (int *) &(sp->movie);
+  var_i[2] = (int *) &(sp->depth);
+  var_i[3] = (int *) &(sp->max_tri);
 
   /* First give the default parameters */
   sp->gamma = 2;
   r_0 = 1.1;
   sp->sigma = 1.e-4;
-  sp->r_membrane = 10;
-  sp->r_genome = 2.5;
+  sp->r_membrane = 0.;
+  sp->r_genome = 0.;
   sp->delta_b = 0.8;
+  sp->a_upper = 32.;
+  sp->a_lower = 15.;
   sp->seed = (unsigned int) time(NULL);
   sp->movie = 0;
+  sp->depth = 4;
+  sp->max_tri = 1500;
 
   /* read the parameter file */
   if( pdata_read_file( &pd, file) == PDATA_FORMAT ){
@@ -488,6 +500,9 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
   sp->th0 = 2.*asin(1./sqrt(12.*r_0*r_0-3.));
   /* Change sigma into radians */
   sp->sigma *= PI_180;
+  /* Change a_upper and a_lower into radians */
+  sp->a_upper *= PI_180;
+  sp->a_lower *= PI_180;
 
   return INOUT_SUCCESS;
 }
@@ -495,15 +510,22 @@ int read_param_file( shell_params *sp, FILE *file, unsigned int n){
 void shell_params_write( shell_params *sp, FILE *file,
                         const char *filename, unsigned int n){
   double s = sin(0.5*sp->th0);
-  double r_0 = (1/(s*s)+3.)/12.;
+  double r_0 = sqrt(1./(12*s*s)+1./4.);
+  double sigma = sp->sigma/PI_180;
+  double a_upper = sp->a_upper/PI_180;
+  double a_lower = sp->a_lower/PI_180;
   fprintf( file, "# Parameter file for %s run number %u\n",
           filename, n);
   fprintf( file, "var gamma %1.10e\n", sp->gamma);
   fprintf( file, "var r_0 %1.10e\n", r_0);
-  fprintf( file, "var sigma %1.10e\n", sp->sigma);
+  fprintf( file, "var sigma %1.10e\n", sigma);
   fprintf( file, "var r_membrane %1.10e\n", sp->r_membrane);
   fprintf( file, "var r_genome %1.10e\n", sp->r_genome);
   fprintf( file, "var delta_b %1.10e\n", sp->delta_b);
+  fprintf( file, "var a_upper %1.10e\n", a_upper);
+  fprintf( file, "var a_lower %1.10e\n", a_lower);
   fprintf( file, "var seed %u\n", sp->seed);
   fprintf( file, "var movie %u\n", sp->movie);
+  fprintf( file, "var depth %u\n", sp->depth);
+  fprintf( file, "var max_tri %u\n", sp->max_tri);
 }

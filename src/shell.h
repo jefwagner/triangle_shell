@@ -83,6 +83,7 @@ typedef struct{
  * line_data, triangles, and triangle data.
  */
 typedef struct{
+  point *vg; /* center of genome */
   unsigned int num_v;
   point *v;
   vertex_data *vd;
@@ -100,7 +101,7 @@ typedef struct{
 shell* shell_malloc( unsigned int max_t );
 void shell_copy( shell *dest, const shell *source);
 void shell_free( shell *s);
-void shell_initialize( shell *s);
+void shell_initialize( shell *s, double r_genome);
 void shell_attach( shell *s, point p, unsigned int li);
 void shell_insert( shell *s, unsigned int vi);
 void shell_close( shell *s, unsigned int vi);

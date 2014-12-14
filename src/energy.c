@@ -24,6 +24,7 @@
 static double energy_unshared( const shell *s, const shell_params *sp,
                               double *dx, unsigned int i){
   double h;
+  int j;
   unsigned int vi0, vi1;
   double *x0, *x1;
   double b, db_dx0[3], db_dx1[3];
@@ -39,9 +40,9 @@ static double energy_unshared( const shell *s, const shell_params *sp,
 
   b = dist_d( x0, x1, db_dx0, db_dx1);
   h = 0.5*k_s*(b-1)*(b-1);
-  for( i=0; i<3; i++){
-    dx[3*vi0+i] += k_s*(b-1)*db_dx0[i];
-    dx[3*vi1+i] += k_s*(b-1)*db_dx1[i];
+  for( j=0; j<3; j++){
+    dx[3*vi0+j+3] += k_s*(b-1)*db_dx0[j];
+    dx[3*vi1+j+3] += k_s*(b-1)*db_dx1[j];
   }
 
   return h;  
@@ -57,6 +58,7 @@ static double energy_unshared( const shell *s, const shell_params *sp,
 static double energy_shared( const shell *s, const shell_params *sp,
                             double *dx, unsigned int i){
   double h;
+  int j;
   unsigned int vi0, vi1, vi2, vi3;
   double *x0, *x1, *x2, *x3;
   double b, db_dx0[3], db_dx1[3];
@@ -80,23 +82,60 @@ static double energy_shared( const shell *s, const shell_params *sp,
 
   b = dist_d( x0, x1, db_dx0, db_dx1);
   h = k_s*(b-1)*(b-1);
-  for( i=0; i<3; i++){
-    dx[3*vi0+i] += 2.*k_s*(b-1)*db_dx0[i];
-    dx[3*vi1+i] += 2.*k_s*(b-1)*db_dx1[i];
+  for( j=0; j<3; j++){
+    dx[3*vi0+j+3] += 2.*k_s*(b-1)*db_dx0[j];
+    dx[3*vi1+j+3] += 2.*k_s*(b-1)*db_dx1[j];
   }
 
   dihedral_d( x0, x1, x2, x3, &co, &si,
              dco_dx0, dco_dx1, dco_dx2, dco_dx3,
              dsi_dx0, dsi_dx1, dsi_dx2, dsi_dx3);
   h += k_b*(1-co*cos(th0)-si*sin(th0));
-  for( i=0; i<3; i++){
-    dx[3*vi0+i] += k_b*(-cos(th0)*dco_dx0[i] - sin(th0)*dsi_dx0[i]);
-    dx[3*vi1+i] += k_b*(-cos(th0)*dco_dx1[i] - sin(th0)*dsi_dx1[i]);
-    dx[3*vi2+i] += k_b*(-cos(th0)*dco_dx2[i] - sin(th0)*dsi_dx2[i]);
-    dx[3*vi3+i] += k_b*(-cos(th0)*dco_dx3[i] - sin(th0)*dsi_dx3[i]);
+  for( j=0; j<3; j++){
+    dx[3*vi0+j+3] += k_b*(-cos(th0)*dco_dx0[j] - sin(th0)*dsi_dx0[j]);
+    dx[3*vi1+j+3] += k_b*(-cos(th0)*dco_dx1[j] - sin(th0)*dsi_dx1[j]);
+    dx[3*vi2+j+3] += k_b*(-cos(th0)*dco_dx2[j] - sin(th0)*dsi_dx2[j]);
+    dx[3*vi3+j+3] += k_b*(-cos(th0)*dco_dx3[j] - sin(th0)*dsi_dx3[j]);
   }
   
   return h;  
+}
+
+/*!
+ * The energe for a single vertex due to the genome and the membrane.
+ */
+double energy_vertex( const shell *s, const shell_params *sp,
+                      double *dx, unsigned int i){
+  int j;
+  double *x0, *x1, b;
+  double db_dx0[3], db_dx1[3];
+  double center[] = {0., 0., 0.};
+  double h = 0.;
+  double rm = sp->r_membrane;
+  double rg = sp->r_genome;
+
+  x1 = (double *) s->v[i].x;
+  if( rm != 0.0 ){
+    b = dist_d( center, x1, db_dx0, db_dx1);
+    if( b > rm ){
+      h = 0.5*(b-rm)*(b-rm);
+      for( j=0; j<3; j++){
+        dx[3*i+j+3] += (b-rm)*db_dx1[j];
+      }
+    }
+  }
+  if( rg != 0 ){
+    x0 = (double *) s->vg[0].x;
+    b = dist_d( x0, x1, db_dx0, db_dx1);
+    if( b < rg || i < 3){
+      h += 0.5*(rg-b)*(rg-b);
+      for( j=0; j<3; j++){
+        dx[3*(-1)+j+3] += (b-rg)*db_dx0[j];
+        dx[3*i+j+3] += (b-rg)*db_dx1[j];
+      }
+    }
+  }
+  return h;
 }
 
 /*!
@@ -126,7 +165,7 @@ double energy_shell( const shell *s, const shell_params *sp,
   double h;
   int i, num_l = s->num_l, num_v = s->num_v;
 
-  for( i=0; i<3*num_v; i++){
+  for( i=0; i<3*(num_v+1); i++){
     dx[i] = 0.;
   }
 
@@ -134,25 +173,32 @@ double energy_shell( const shell *s, const shell_params *sp,
   for( i=0; i<num_l; i++){
     h += energy_line( s, sp, dx, i);
   }
+  for( i=0; i<num_v; i++){
+    h += energy_vertex( s, sp, dx, i);
+  }
   return h;
 }
 
 /*!
  * Calculate the elastic energy for a set of lines on the shell.
  */
-double energy_lines( const shell *s, const shell_params *sp,
-                    unsigned int num_l, const unsigned int *l,
-                    double *dx){
+double energy_partial( const shell *s, const shell_params *sp,
+                       unsigned int num_l, const unsigned int *l,
+                       unsigned int num_v, const unsigned int *v,
+                       double *dx){
   double h;
-  int i, num_v = s->num_v;
+  int i;
 
-  for( i=0; i<3*num_v; i++){
+  for( i=0; i<3*(s->num_v+1); i++){
     dx[i] = 0.;
   }
 
   h = 0.;
   for( i=0; i<num_l; i++){
     h += energy_line( s, sp, dx, l[i]);
+  }
+  for( i=0; i<num_v; i++){
+    h += energy_vertex( s, sp, dx, v[i]);
   }
   return h;
 }
