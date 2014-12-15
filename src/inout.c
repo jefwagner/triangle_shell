@@ -112,12 +112,12 @@ void shell_write( shell *s, FILE *f){
 
   fprintf( f, "Position of Genome\n");
   fprintf( f, "x y z\n");
-  fprintf( f, "%1.6e %1.6e %1.6e\n", s->p_gen->x[0], 
-          s->p_gen->x[1], s->p_gen->x[2]);
-  fprintf( f, "Position of Membrane\n");
-  fprintf( f, "x y z\n");
-  fprintf( f, "%1.6e %1.6e %1.6e\n", s->p_mem->x[0],
-          s->p_mem->x[1], s->p_mem->x[2]);
+  fprintf( f, "%1.6e %1.6e %1.6e\n", s->vg->x[0], 
+          s->vg->x[1], s->vg->x[2]);
+  // fprintf( f, "Position of Membrane\n");
+  // fprintf( f, "x y z\n");
+  // fprintf( f, "%1.6e %1.6e %1.6e\n", s->p_mem->x[0],
+  //         s->p_mem->x[1], s->p_mem->x[2]);
 }
 
 int shell_read( shell *s, FILE *f){

@@ -199,22 +199,14 @@ shell_run* shell_run_malloc( shell_params *sp){
     free( sr);
     return NULL;
   }
-  sr->rp = relax_partial_ws_malloc( depth);
-  if( sr->rp == NULL ){
-    free( sr->ml);
-    nlcg_free( sr->nlcg);
-    shell_free( sr->s);
-    free( sr);
-    return NULL;    
-  }
 
   return sr;
 }
 
 void shell_run_free( shell_run *sr){
-  relax_partial_ws_free( sr->rp);
   free( sr->ml);
   nlcg_free( sr->nlcg);
+  shell_free( sr->s5);
   shell_free( sr->s);
   free( sr);
 }
@@ -248,25 +240,6 @@ int shell_run_initialize( shell_run *sr){
   shell_initialize( sr->s, sr->sp->r_genome);
   nlcg_set_tol( 0., 0., 1.e-2, 20000, sr->nlcg);
   return 0;
-}
-
-void shell_run_initialize( shell_run *sr, shell_params *sp){
-  double z, r_gen = sp->r_genome;
-  if( r_gen != 0 ){
-    z = sqrt(r_gen*r_gen-3./9.);
-  }else{
-    z = 0.;
-  }
-  sr->sp = sp;
-  srand( sp->seed);
-  shell_initialize( sr->s);
-  sr->s->p_gen->x[0] = 0.5; 
-  sr->s->p_gen->x[1] = ROOT3/6.;
-  sr->s->p_gen->x[2] = z;
-  sr->s->p_mem->x[0] = 0.; 
-  sr->s->p_mem->x[1] = 0.;
-  sr->s->p_mem->x[2] = 0.;
-  nlcg_set_tol( 0., 0., 1.e-2, sp->nlcg_max_eval, sr->nlcg);
 }
 
 /*!

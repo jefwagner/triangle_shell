@@ -48,7 +48,6 @@ shell* shell_malloc( unsigned int max_t ){
   if( s== NULL ){ return NULL; }
   max_v = max_t + 2;
   max_l = 2*max_t + 1;
-<<<<<<< HEAD
   s->vg = (point *) malloc( (max_v+1)*sizeof(point));
   if( s->vg == NULL ){ 
     free( s); 
@@ -58,40 +57,20 @@ shell* shell_malloc( unsigned int max_t ){
   s->vd = (vertex_data *) malloc( max_v*sizeof(vertex_data));
   if( s->vd == NULL ){ 
     free( s->vg); 
-=======
-  s->p_gen = (point *) malloc( (max_v+2)*sizeof(point));
-  if( s->p_gen == NULL ){ 
-    free( s); 
-    return NULL; 
-  }
-  s->p_mem = &(s->p_gen[1]);
-  s->v = &(s->p_gen[2]);
-  s->vd = (vertex_data *) malloc( max_v*sizeof(vertex_data));
-  if( s->vd == NULL ){ 
-    free( s->p_gen); 
->>>>>>> 7e9c935107116aa4480a2e519892c4e781f49095
     free( s);
     return NULL; 
   }
   s->l = (line *) malloc( max_l*sizeof(line));
   if( s->l == NULL ){ 
     free( s->vd);
-<<<<<<< HEAD
     free( s->vg); 
-=======
-    free( s->p_gen); 
->>>>>>> 7e9c935107116aa4480a2e519892c4e781f49095
     free( s);
     return NULL; }
   s->ld = (line_data *) malloc( max_l*sizeof(line_data));
   if( s->ld == NULL ){ 
     free( s->l);
     free( s->vd);
-<<<<<<< HEAD
     free( s->vg); 
-=======
-    free( s->p_gen); 
->>>>>>> 7e9c935107116aa4480a2e519892c4e781f49095
     free( s);
     return NULL; 
   }
@@ -100,11 +79,7 @@ shell* shell_malloc( unsigned int max_t ){
     free( s->ld);
     free( s->l);
     free( s->vd);
-<<<<<<< HEAD
     free( s->vg); 
-=======
-    free( s->p_gen); 
->>>>>>> 7e9c935107116aa4480a2e519892c4e781f49095
     free( s);
     return NULL; 
   }
@@ -114,11 +89,7 @@ shell* shell_malloc( unsigned int max_t ){
     free( s->ld);
     free( s->l);
     free( s->vd);
-<<<<<<< HEAD
     free( s->vg); 
-=======
-    free( s->p_gen); 
->>>>>>> 7e9c935107116aa4480a2e519892c4e781f49095
     free( s);
     return NULL; 
   }
@@ -131,11 +102,7 @@ shell* shell_malloc( unsigned int max_t ){
  */
 void shell_copy( shell *dest, const shell *source){
   dest->num_v = source->num_v;
-<<<<<<< HEAD
   memcpy( dest->vg, source->vg, (source->num_v+1)*sizeof(point));
-=======
-  memcpy( dest->p_gen, source->p_gen, (source->num_v+2)*sizeof(point));
->>>>>>> 7e9c935107116aa4480a2e519892c4e781f49095
   memcpy( dest->vd, source->vd, source->num_v*sizeof(vertex_data));
   dest->num_l = source->num_l;
   memcpy( dest->l, source->l, source->num_l*sizeof(line));
@@ -154,11 +121,7 @@ void shell_free( shell *s){
   free( s->ld);
   free( s->l);
   free( s->vd);
-<<<<<<< HEAD
   free( s->vg);
-=======
-  free( s->p_gen);
->>>>>>> 7e9c935107116aa4480a2e519892c4e781f49095
   free( s);
 }
 

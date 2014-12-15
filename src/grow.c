@@ -275,28 +275,6 @@ static unsigned int close_index( shell *s, unsigned int vi){
   return vi_out;
 }
 
-static int test_join( const shell *s, unsigned int i, unsigned int j){
-  unsigned int vi0, vi1, vi2, vi3, via, vib;
-  int k, status=1;
-
-  vi0 = s->l[i].i[0];
-  vi1 = s->l[i].i[1];
-  vi2 = s->l[j].i[0];
-  vi3 = s->l[j].i[1];  
-  for( k=0; k<s->num_l; k++){
-    via = s->l[k].i[0];
-    vib = s->l[k].i[1];
-    if((vi0 == via && vi3 == vib) ||
-       (vi0 == vib && vi3 == via) ||
-       (vi1 == via && vi2 == vib) ||
-       (vi1 == vib && vi2 == via) ){
-      status = 0;
-      break;
-    }
-  }
-  return status;
-}
-
 /*!
  * Merge edges.
  *
@@ -367,7 +345,7 @@ int merge( shell_run *sr){
  * is negative.
  */
 int grow( shell_run *sr ){
-  unsigned int k, num_k, tpv;
+  unsigned int k, num_k;
   point pnew;
   int status = -1;
   shell *s = sr->s;
