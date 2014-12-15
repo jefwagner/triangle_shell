@@ -1,0 +1,782 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     37131,        773]
+NotebookOptionsPosition[     36434,        745]
+NotebookOutlinePosition[     36810,        762]
+CellTagsIndexPosition[     36767,        759]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.615828125544201*^9, 3.615828142176014*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"resultsFileNames", "[", "]"}], ":=", 
+  RowBox[{"FileNames", "[", 
+   RowBox[{
+    RowBox[{"Directory", "[", "]"}], "<>", "\"\</results/*.shell\>\""}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.615828218841112*^9, 3.615828228390414*^9}, {
+  3.6158282970508213`*^9, 3.6158283213392353`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"movieFileNames", "[", "]"}], ":=", 
+  RowBox[{"FileNames", "[", 
+   RowBox[{
+    RowBox[{"Directory", "[", "]"}], "<>", "\"\</movie/*.shell\>\""}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.615828218841112*^9, 3.615828228390414*^9}, {
+  3.6158282970508213`*^9, 3.6158283240274057`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"readShell", "[", "file_", "]"}], ":=", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "f", ",", "n", ",", "nn", ",", "v", ",", "voe", ",", "vl", ",", "vt", 
+      ",", "l", ",", "loe", ",", "lt", ",", "t", ",", "toe", ",", "tl", ",", 
+      "\[IndentingNewLine]", "rGenome", ",", "vGenome", ",", "rMembrane", ",",
+       "vMembrane", ",", "gamma", ",", "r0", ",", "sigma", ",", "deltaB", ",",
+       "\[IndentingNewLine]", "fname", ",", "base"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"f", "=", 
+      RowBox[{"OpenRead", "[", "file", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"n", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"v", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Read", "[", 
+         RowBox[{"f", ",", 
+          RowBox[{"{", 
+           RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}], 
+        ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "3"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"voe", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Read", "[", 
+         RowBox[{"f", ",", "Word"}], "]"}], ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"vl", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"nn", "=", 
+          RowBox[{"Read", "[", 
+           RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+         
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Read", "[", 
+            RowBox[{"f", ",", "Number"}], "]"}], ",", 
+           RowBox[{"{", "nn", "}"}]}], "]"}]}], ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"vt", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"nn", "=", 
+          RowBox[{"Read", "[", 
+           RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+         
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Read", "[", 
+            RowBox[{"f", ",", "Number"}], "]"}], ",", 
+           RowBox[{"{", "nn", "}"}]}], "]"}]}], ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"n", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"l", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Read", "[", 
+         RowBox[{"f", ",", 
+          RowBox[{"{", 
+           RowBox[{"Number", ",", "Number"}], "}"}]}], "]"}], ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"loe", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Read", "[", 
+         RowBox[{"f", ",", "Word"}], "]"}], ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"lt", "=", 
+      RowBox[{"Table", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"loe", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "\[Equal]", "\"\<true\>\""}], ",",
+           "\[IndentingNewLine]", 
+          RowBox[{"Read", "[", 
+           RowBox[{"f", ",", 
+            RowBox[{"{", "Number", "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"Read", "[", 
+           RowBox[{"f", ",", 
+            RowBox[{"{", 
+             RowBox[{"Number", ",", "Number"}], "}"}]}], "]"}]}], "]"}], ",", 
+        
+        RowBox[{"{", 
+         RowBox[{"i", ",", "n"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"n", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"t", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Read", "[", 
+         RowBox[{"f", ",", 
+          RowBox[{"{", 
+           RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}], 
+        ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"toe", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Read", "[", 
+         RowBox[{"f", ",", "Word"}], "]"}], ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"tl", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Read", "[", 
+         RowBox[{"f", ",", 
+          RowBox[{"{", 
+           RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}], 
+        ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"vGenome", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", 
+        RowBox[{"{", 
+         RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record", ",", "2"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"vMembrane", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", 
+        RowBox[{"{", 
+         RowBox[{"Number", ",", "Number", ",", "Number"}], "}"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"Close", "[", "f", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"voe", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "\[Equal]", "\"\<true\>\""}], "&"}], ",", "voe"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"vl", "=", 
+      RowBox[{"vl", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"vt", "=", 
+      RowBox[{"vt", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"l", "=", 
+      RowBox[{"l", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"loe", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "\[Equal]", "\"\<true\>\""}], "&"}], ",", "loe"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"lt", "=", 
+      RowBox[{"lt", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"t", "=", 
+      RowBox[{"t", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"toe", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "\[Equal]", "\"\<true\>\""}], "&"}], ",", "toe"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"tl", "=", 
+      RowBox[{"tl", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"base", "=", 
+      RowBox[{
+       RowBox[{"StringSplit", "[", 
+        RowBox[{"file", ",", "\"\</\>\""}], "]"}], "[", 
+       RowBox[{"[", 
+        RowBox[{"-", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"fname", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"StringSplit", "[", 
+           RowBox[{"base", ",", "\"\<_\>\""}], "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "\[Equal]", "\"\<frame\>\""}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"StringReplace", "[", 
+         RowBox[{"file", ",", 
+          RowBox[{"base", "\[Rule]", "\"\<movie.prm\>\""}]}], "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"StringReplace", "[", 
+         RowBox[{"file", ",", 
+          RowBox[{"\"\<.shell\>\"", "\[Rule]", "\"\<.prm\>\""}]}], "]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"f", "=", 
+      RowBox[{"OpenRead", "[", "fname", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Record"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"gamma", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"r0", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"sigma", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"rMembrane", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"rGenome", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Skip", "[", 
+      RowBox[{"f", ",", "Word", ",", "2"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"deltaB", "=", 
+      RowBox[{"Read", "[", 
+       RowBox[{"f", ",", "Number"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Close", "[", "f", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"v", ",", 
+       RowBox[{"{", 
+        RowBox[{"voe", ",", "vl", ",", "vt"}], "}"}], ",", "l", ",", 
+       RowBox[{"{", 
+        RowBox[{"loe", ",", "lt"}], "}"}], ",", "t", ",", 
+       RowBox[{"{", 
+        RowBox[{"toe", ",", "tl"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"vGenome", ",", "rGenome"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"vMembrane", ",", "rMembrane"}], "}"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"gamma", ",", "r0", ",", "sigma", ",", "deltaB"}], "}"}]}], 
+      "}"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.615828887398155*^9, 3.615829150196192*^9}, {
+  3.615829184093876*^9, 3.615829362045548*^9}, {3.615829395702517*^9, 
+  3.615829513601183*^9}, {3.6158295450954027`*^9, 3.615829819762186*^9}, {
+  3.615829996730856*^9, 3.615830007115313*^9}, {3.615830178099183*^9, 
+  3.6158302920578423`*^9}, {3.615830586880886*^9, 3.615830617129545*^9}, {
+  3.6159009651204443`*^9, 3.615901064804862*^9}, {3.615901144385529*^9, 
+  3.615901446145505*^9}, {3.615901480098325*^9, 3.615901481735067*^9}, {
+  3.615901535581049*^9, 3.615901549636413*^9}, {3.615920656905727*^9, 
+  3.615920661018737*^9}, {3.6159231755886307`*^9, 3.6159231784509077`*^9}, {
+  3.615923293854823*^9, 3.615923320009165*^9}, {3.615923369536255*^9, 
+  3.615923522244829*^9}, {3.615924364558631*^9, 3.615924364837907*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"plotShell", "[", "shell_", "]"}], ":=", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "v", ",", "vd", ",", "l", ",", "ld", ",", "t", ",", "td", ",", "le", ",",
+       "spheres", ",", "params", ",", "stuff"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "v", ",", "vd", ",", "l", ",", "ld", ",", "t", ",", "td", ",", 
+        "spheres", ",", "params"}], "}"}], "=", "shell"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"le", "=", 
+      RowBox[{"l", "[", 
+       RowBox[{"[", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Position", "[", 
+          RowBox[{
+           RowBox[{"ld", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", "True"}], "]"}], "]"}], 
+        "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"stuff", "=", 
+      RowBox[{"{", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"v", ",", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"EdgeForm", "[", 
+              RowBox[{"{", 
+               RowBox[{"Thick", ",", "Black"}], "}"}], "]"}], ",", "Blue", 
+             ",", 
+             RowBox[{"Map", "[", 
+              RowBox[{"Polygon", ",", "t"}], "]"}]}], "}"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{"Thick", ",", "Red", ",", 
+             RowBox[{"Map", "[", 
+              RowBox[{"Line", ",", "le"}], "]"}]}], "}"}]}], 
+          "\[IndentingNewLine]", "}"}]}], "]"}], "}"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"spheres", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "!=", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"stuff", "=", 
+        RowBox[{"Append", "[", 
+         RowBox[{"stuff", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Opacity", "[", "0.7", "]"}], ",", 
+            RowBox[{"Apply", "[", 
+             RowBox[{"Sphere", ",", 
+              RowBox[{"spheres", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], "}"}]}], "]"}]}]}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"spheres", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "!=", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"stuff", "=", 
+        RowBox[{"Append", "[", 
+         RowBox[{"stuff", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Opacity", "[", "0.5", "]"}], ",", 
+            RowBox[{"Apply", "[", 
+             RowBox[{"Sphere", ",", 
+              RowBox[{"spheres", "[", 
+               RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}], "}"}]}], "]"}]}]}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", "stuff", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"stuff", ",", 
+       RowBox[{"Lighting", "\[Rule]", "\"\<Neutral\>\""}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6159014632338953`*^9, 3.61590151517238*^9}, {
+  3.615901560718631*^9, 3.615901610889497*^9}, {3.615901750944277*^9, 
+  3.6159018874327393`*^9}, {3.615901917465109*^9, 3.615901923273336*^9}, {
+  3.615923679101001*^9, 3.615923705686068*^9}, {3.615923746784831*^9, 
+  3.6159237752724247`*^9}, {3.61592383920582*^9, 3.615923868085923*^9}, {
+  3.61616146840456*^9, 3.616161489293236*^9}, {3.6161870939373083`*^9, 
+  3.616187097817493*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"names", "=", 
+   RowBox[{"resultsFileNames", "[", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.615899805804779*^9, 3.615899808480297*^9}, {
+  3.6159003773176317`*^9, 3.615900381867834*^9}, {3.6159236351769037`*^9, 
+  3.6159236396555862`*^9}, {3.615925628848442*^9, 3.615925629854938*^9}, {
+  3.616267579729102*^9, 3.616267580954488*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"plotShell", "[", 
+    RowBox[{"readShell", "[", "name", "]"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"name", ",", "names"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.615837144135264*^9, 3.6158371476023493`*^9}, {
+  3.6159003904602423`*^9, 3.615900402925029*^9}, {3.615900519066736*^9, 
+  3.615900522314855*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`name$$ = 
+    "/Users/jef/builds/triangle_shell/results/run01_00107.shell", 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`name$$], {
+      "/Users/jef/builds/triangle_shell/results/params_00038.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00000.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00001.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00002.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00003.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00004.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00005.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00006.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00007.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00008.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00009.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00010.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00011.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00012.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00013.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00014.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00015.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00016.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00017.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00018.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00019.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00020.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00021.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00022.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00023.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00024.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00025.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00026.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00027.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00028.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00029.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00030.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00031.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00032.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00033.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00034.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00035.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00036.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00037.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00038.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00039.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00040.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00041.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00042.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00043.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00044.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00045.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00046.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00047.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00048.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00049.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00050.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00051.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00052.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00053.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00054.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00055.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00056.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00057.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00058.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00059.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00060.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00061.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00062.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00063.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00064.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00065.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00066.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00067.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00068.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00069.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00070.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00071.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00072.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00073.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00074.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00075.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00076.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00077.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00078.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00079.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00080.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00081.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00082.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00083.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00084.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00085.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00086.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00087.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00088.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00089.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00090.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00091.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00092.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00093.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00094.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00095.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00096.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00097.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00098.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00099.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00100.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00101.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00102.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00103.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00104.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00105.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00106.shell", 
+       "/Users/jef/builds/triangle_shell/results/run01_00107.shell"}}}, 
+    Typeset`size$$ = {360., {178., 182.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`name$12478$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`name$$ = 
+        "/Users/jef/builds/triangle_shell/results/params_00038.shell"}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`name$$, $CellContext`name$12478$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> $CellContext`plotShell[
+        $CellContext`readShell[$CellContext`name$$]], 
+      "Specifications" :> {{$CellContext`name$$, {
+         "/Users/jef/builds/triangle_shell/results/params_00038.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00000.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00001.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00002.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00003.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00004.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00005.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00006.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00007.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00008.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00009.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00010.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00011.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00012.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00013.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00014.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00015.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00016.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00017.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00018.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00019.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00020.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00021.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00022.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00023.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00024.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00025.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00026.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00027.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00028.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00029.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00030.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00031.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00032.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00033.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00034.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00035.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00036.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00037.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00038.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00039.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00040.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00041.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00042.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00043.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00044.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00045.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00046.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00047.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00048.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00049.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00050.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00051.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00052.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00053.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00054.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00055.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00056.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00057.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00058.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00059.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00060.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00061.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00062.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00063.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00064.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00065.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00066.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00067.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00068.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00069.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00070.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00071.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00072.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00073.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00074.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00075.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00076.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00077.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00078.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00079.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00080.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00081.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00082.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00083.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00084.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00085.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00086.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00087.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00088.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00089.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00090.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00091.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00092.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00093.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00094.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00095.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00096.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00097.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00098.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00099.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00100.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00101.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00102.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00103.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00104.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00105.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00106.shell", 
+          "/Users/jef/builds/triangle_shell/results/run01_00107.shell"}}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{459., {222., 227.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.6158371484524593`*^9, 3.6158378058836203`*^9, 3.61583804713125*^9, 
+   3.6158390920637836`*^9, 3.615839733406447*^9, 3.615840116253771*^9, 
+   3.6158403320169153`*^9, 3.615900404788509*^9, 3.615900523096344*^9, {
+   3.615900871940935*^9, 3.615900880242989*^9}, 3.615923542468191*^9, 
+   3.6159236483570137`*^9, 3.615925327919283*^9, 3.6159256317578783`*^9, 
+   3.6159261529690857`*^9, 3.616179638904593*^9, {3.616179688243515*^9, 
+   3.6161796918496933`*^9}, 3.616182586692568*^9, 3.6161829807153883`*^9, 
+   3.616183102895393*^9, {3.616183186436433*^9, 3.6161831865853577`*^9}, {
+   3.61618329326447*^9, 3.616183295038515*^9}, 3.616183811543221*^9, 
+   3.616183853393578*^9, 3.61618388464184*^9, 3.616187764594802*^9, 
+   3.616245076078018*^9, 3.616245115026457*^9, 3.61624518268613*^9, 
+   3.616245328191599*^9, 3.616267611921199*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"4", "*", "6", "*", "3", "*", "4"}]], "Input",
+ CellChangeTimes->{{3.616268439687439*^9, 3.616268444163782*^9}}],
+
+Cell[BoxData["288"], "Output",
+ CellChangeTimes->{3.616268444763619*^9}]
+}, Open  ]]
+},
+WindowSize->{740, 818},
+WindowMargins->{{75, Automatic}, {Automatic, 0}},
+ShowSelection->True,
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 189, 4, 28, "Input"],
+Cell[749, 26, 328, 8, 28, "Input"],
+Cell[1080, 36, 324, 8, 28, "Input"],
+Cell[1407, 46, 12111, 296, 1219, "Input"],
+Cell[13521, 344, 3707, 96, 267, "Input"],
+Cell[17231, 442, 375, 7, 28, "Input"],
+Cell[CellGroupData[{
+Cell[17631, 453, 388, 9, 28, "Input"],
+Cell[18022, 464, 18149, 268, 466, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[36208, 737, 135, 2, 28, "Input"],
+Cell[36346, 741, 72, 1, 28, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

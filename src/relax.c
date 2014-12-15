@@ -24,17 +24,25 @@ void neighbors( int center, int depth,
 
 
 typedef struct{
-  int count;
+  unsigned int count;
   shell *s;
   shell_params *sp;
-} fn_min_params;
+} fn_min_total_params;
 
-double fn_min( int n, const double *x, double *dfdx, void *p ){
-  int *count = &(((fn_min_params *) p)->count);
-  shell *s = ((fn_min_params *) p)->s;
-  shell_params *sp = ((fn_min_params *) p)->sp;
+double fn_min_total( int n, const double *x, double *dfdx, void *p ){
+  double h;
+  unsigned int *count = &(((fn_min_total_params *) p)->count);
+  shell *s = ((fn_min_total_params *) p)->s;
+  shell_params *sp = ((fn_min_total_params *) p)->sp;
   (*count)++;
-  return energy_shell( s, sp, dfdx);
+  h = energy_shell( s, sp, &(dfdx[3*2]));
+  if( sp->r_genome != 0.0 ){
+    h += energy_gen( s, sp, dfdx);
+  }
+  if( sp->r_membrane != 0.0 ){
+    h += energy_mem( s, sp, dfdx);
+  }
+  return h;
 }
 
 int relax_total( shell_run *sr , shell *s){

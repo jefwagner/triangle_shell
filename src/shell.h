@@ -104,6 +104,7 @@ void shell_free( shell *s);
 void shell_initialize( shell *s, double r_genome);
 void shell_attach( shell *s, point p, unsigned int li);
 void shell_insert( shell *s, unsigned int vi);
+void shell_merge_line( shell *s, unsigned int li0, unsigned int li1);
 void shell_close( shell *s, unsigned int vi);
 void shell_join( shell *s, unsigned int li0, unsigned int li1);
 void shell_remove( shell *s, unsigned int ti);

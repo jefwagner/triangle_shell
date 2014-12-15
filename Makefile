@@ -27,6 +27,7 @@ TEST_DEPS = $(patsubst %.c, %.d, $(TEST_SRCS))
 
 # Choose the C, C++, and Fortran compiler
 CC=gcc
+#CC=clang
 CXX=g++
 FC=gfortran
 

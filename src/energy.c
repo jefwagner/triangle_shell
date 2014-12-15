@@ -10,6 +10,8 @@
 
 #include <math.h>
 
+#include <stdio.h>
+
 #include "shell.h"
 #include "vec3.h"
 #include "energy.h"

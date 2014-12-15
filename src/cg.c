@@ -225,13 +225,18 @@ double nlcg_optimize( double *x, nlcg_ws g){
     /* The initial search direction is the negative gradient */
     s[i] = -dfdx[i];
   }
+  if( denom < (g->tol.dfdx_tol)*(g->tol.dfdx_tol) &&
+      g->tol.df_tol == DBL_MAX &&
+      g->tol.dx_tol == DBL_MAX ){
+    return f;
+  }
   for( j=0; j<NLCG_ITER_MAX; j++ ){
     /* Do a line search*/
     memcpy( dfdx_old, dfdx, n*sizeof(double));
     f_old = f;
     f = sw_line_search( f, &(g->lf));
     /* Calculate the square magnitude of the gradient */
-/*     printf( "value: %1.3e \n", f); */
+    /* printf( "nlcg: %u \n", of->count); */
     slope = dfdx[0]*dfdx[0];
     num = dfdx[0]*(dfdx[0]-dfdx_old[0]);
     for( i=1; i<n; i++){

@@ -21,7 +21,7 @@
 #include "relax.h"
 #include "grow.h"
 
-#define MAX_TRI 1500
+#include "math_const.h"
 
 void usage( const char* argv0);
 int get_cl_args( int argc, const char **argv,
@@ -120,6 +120,7 @@ int main( int argc, const char **argv){
     frame_count++;
     printf( "t: %u\n", sr->s->num_t);
   }
+  printf( "\n");
 
   status += print_shell( sr->s, n, parameter_filename);
 
@@ -183,7 +184,7 @@ shell_run* shell_run_malloc( shell_params *sp){
     free( sr);
     return NULL;
   }
-  sr->nlcg = nlcg_malloc(max_vert);
+  sr->nlcg = nlcg_malloc(3*(max_vert+2));
   if( sr->nlcg == NULL ){
     shell_free( sr->s5);
     shell_free( sr->s);
@@ -198,11 +199,20 @@ shell_run* shell_run_malloc( shell_params *sp){
     free( sr);
     return NULL;
   }
+  sr->rp = relax_partial_ws_malloc( depth);
+  if( sr->rp == NULL ){
+    free( sr->ml);
+    nlcg_free( sr->nlcg);
+    shell_free( sr->s);
+    free( sr);
+    return NULL;    
+  }
 
   return sr;
 }
 
 void shell_run_free( shell_run *sr){
+  relax_partial_ws_free( sr->rp);
   free( sr->ml);
   nlcg_free( sr->nlcg);
   shell_free( sr->s);
@@ -240,6 +250,25 @@ int shell_run_initialize( shell_run *sr){
   return 0;
 }
 
+void shell_run_initialize( shell_run *sr, shell_params *sp){
+  double z, r_gen = sp->r_genome;
+  if( r_gen != 0 ){
+    z = sqrt(r_gen*r_gen-3./9.);
+  }else{
+    z = 0.;
+  }
+  sr->sp = sp;
+  srand( sp->seed);
+  shell_initialize( sr->s);
+  sr->s->p_gen->x[0] = 0.5; 
+  sr->s->p_gen->x[1] = ROOT3/6.;
+  sr->s->p_gen->x[2] = z;
+  sr->s->p_mem->x[0] = 0.; 
+  sr->s->p_mem->x[1] = 0.;
+  sr->s->p_mem->x[2] = 0.;
+  nlcg_set_tol( 0., 0., 1.e-2, sp->nlcg_max_eval, sr->nlcg);
+}
+
 /*!
  * Strip the file extension off of a c string.
  */
@@ -269,6 +298,16 @@ int print_params( shell_params *sp, unsigned int n,
   }
   shell_params_write( sp, f, filename, n);
   fclose( f);
+  if( sp->movie ){
+    sprintf( prm_file, "movie/movie.prm");
+    f = fopen( prm_file, "w");
+    if( f == NULL ){
+      fprintf( stderr, "Could not open outputfile %s\n", prm_file);
+      return 1;
+    }
+    shell_params_write( sp, f, filename, n);
+    fclose(f);
+  }
   return 0;
 }
 

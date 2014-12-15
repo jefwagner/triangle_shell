@@ -49,7 +49,7 @@ static point new_point( shell *s, shell_params *sp, unsigned int li){
  * Find the opening angle at a vertex on the edge.
  */
 static double get_vertex_angle( shell *s, unsigned int vi){
-  unsigned int lil, lir;
+  unsigned int lil = 0, lir = 0;
   unsigned int vi1, vi3, vi4, vi5;
   double *x1, *x2, *x3, *x4, *x5;
   vertex_lines_on_edge( s, vi, &lil, &lir);
@@ -76,7 +76,7 @@ static double get_vertex_angle( shell *s, unsigned int vi){
  * the opening angle of both vertices.
  */
 static double get_line_angle( shell *s, unsigned int li){
-  unsigned int lil, li_temp, lir;
+  unsigned int lil = 0, li_temp = 0, lir = 0;
   unsigned int vi1, vi2, vi3, vi4, vi5;
   double *x1, *x2, *x3, *x4, *x5;
   double a_l, a_r;
@@ -126,7 +126,7 @@ unsigned int fill_move_array( shell *s, move *ml){
   k=0;
   for( i=0; i<s->num_v; i++){
     if( s->vd[i].oe == yes && 
-       s->vd[i].num_t >= 5){
+       s->vd[i].num_t >= 4){
       ml[k].type = vertex_move;
       ml[k].index = i;
       ml[k].angle = get_vertex_angle( s, i);
@@ -250,7 +250,7 @@ static int test_attach( shell *s, point p){
   for( i=0; i<s->num_t; i++){
     center = tri_center( s, i);
     b = dist( center.x, p.x);
-    if( b < ROOT3/4.){
+    if( b < ROOT3/3.+0.05){
       status++;
     }
   }
@@ -266,13 +266,35 @@ static int test_attach( shell *s, point p){
  * vertex is renumbered, and returns the new vertex index.
  */
 static unsigned int close_index( shell *s, unsigned int vi){
-  unsigned int lil, lir, vil, vir, vi_min, vi_out;
+  unsigned int lil=0, lir=0, vil, vir, vi_min, vi_out;
   vertex_lines_on_edge( s, vi, &lil, &lir);
   vil = s->l[lil].i[0];
   vir = s->l[lir].i[1];
   vi_min = min( vil, vir);
   vi_out = vi>vi_min?vi-1:vi;
   return vi_out;
+}
+
+static int test_join( const shell *s, unsigned int i, unsigned int j){
+  unsigned int vi0, vi1, vi2, vi3, via, vib;
+  int k, status=1;
+
+  vi0 = s->l[i].i[0];
+  vi1 = s->l[i].i[1];
+  vi2 = s->l[j].i[0];
+  vi3 = s->l[j].i[1];  
+  for( k=0; k<s->num_l; k++){
+    via = s->l[k].i[0];
+    vib = s->l[k].i[1];
+    if((vi0 == via && vi3 == vib) ||
+       (vi0 == vib && vi3 == via) ||
+       (vi1 == via && vi2 == vib) ||
+       (vi1 == vib && vi2 == via) ){
+      status = 0;
+      break;
+    }
+  }
+  return status;
 }
 
 /*!
@@ -345,7 +367,7 @@ int merge( shell_run *sr){
  * is negative.
  */
 int grow( shell_run *sr ){
-  unsigned int k, num_k;
+  unsigned int k, num_k, tpv;
   point pnew;
   int status = -1;
   shell *s = sr->s;
